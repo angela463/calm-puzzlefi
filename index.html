@@ -6,20 +6,20 @@
     <title>Calm Puzzlefi – Wind down &amp; drift off</title>
     <style>
       :root {
-        /* Calming, low-stimulation palette — decompress & before bed */
-        --bg-deep: #1a1f2e;
-        --bg-soft: #232a3b;
-        --bg-card: rgba(35, 42, 59, 0.85);
-        --accent-sage: #8b9f8e;
+        /* Calm purple & blue — vector mosaic palette */
+        --bg-deep: #1e2238;
+        --bg-soft: #252a42;
+        --bg-card: rgba(37, 42, 66, 0.88);
+        --accent-sage: #7a8f9e;
         --accent-lavender: #9a8fb5;
-        --accent-dust: #b5a898;
-        --accent-mist: #7a8fa8;
-        --text-primary: #e8e6e3;
-        --text-soft: #a8a6a1;
-        --text-softer: #6b6964;
+        --accent-dust: #a89fb5;
+        --accent-mist: #6b7ba8;
+        --text-primary: #e6e4ec;
+        --text-soft: #b0acc0;
+        --text-softer: #7a7690;
         --glow-soft: rgba(154, 143, 181, 0.25);
-        --glow-sage: rgba(139, 159, 142, 0.2);
-        --border-soft: rgba(168, 166, 161, 0.2);
+        --glow-sage: rgba(107, 123, 168, 0.2);
+        --border-soft: rgba(176, 172, 192, 0.2);
         --radius-blob: 32px;
         --radius-pill: 999px;
         --font: "DM Sans", "Segoe UI", system-ui, sans-serif;
@@ -41,23 +41,20 @@
         overflow-x: hidden;
       }
 
-      /* Vector shape background */
+      /* Vector shape background — geometric mosaic */
       .page-bg {
         position: fixed;
         inset: 0;
         z-index: 0;
         overflow: hidden;
+        background: var(--bg-deep);
       }
 
       .page-bg svg {
         width: 100%;
         height: 100%;
-        opacity: 0.5;
-      }
-
-      .shape-blur {
-        filter: blur(80px);
-        opacity: 0.4;
+        object-fit: cover;
+        opacity: 0.85;
       }
 
       .page-shell {
@@ -551,25 +548,82 @@
     <div class="page-bg" aria-hidden="true">
       <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="blob1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#9a8fb5" stop-opacity="0.35" />
-            <stop offset="100%" stop-color="#7a8fa8" stop-opacity="0.15" />
+          <linearGradient id="mosaic-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4a5088" />
+            <stop offset="100%" stop-color="#3a4068" />
           </linearGradient>
-          <linearGradient id="blob2" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#8b9f8e" stop-opacity="0.3" />
-            <stop offset="100%" stop-color="#9a8fb5" stop-opacity="0.1" />
+          <linearGradient id="mosaic-purple" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#5a5090" />
+            <stop offset="100%" stop-color="#4a4080" />
           </linearGradient>
-          <linearGradient id="blob3" x1="50%" y1="100%" x2="50%" y2="0%">
-            <stop offset="0%" stop-color="#b5a898" stop-opacity="0.25" />
-            <stop offset="100%" stop-color="#8b9f8e" stop-opacity="0.1" />
-          </linearGradient>
+          <pattern id="stripes-diag" patternUnits="userSpaceOnUse" width="24" height="24" patternTransform="rotate(-45)">
+            <rect width="12" height="24" fill="#5a6098" opacity="0.5" />
+          </pattern>
         </defs>
-        <circle class="shape-blur" cx="200" cy="120" r="180" fill="url(#blob1)" />
-        <circle class="shape-blur" cx="1000" cy="400" r="220" fill="url(#blob2)" />
-        <circle class="shape-blur" cx="600" cy="680" r="160" fill="url(#blob3)" />
-        <circle cx="150" cy="600" r="80" fill="#8b9f8e" fill-opacity="0.08" />
-        <circle cx="950" cy="150" r="60" fill="#9a8fb5" fill-opacity="0.1" />
-        <circle cx="600" cy="200" r="100" fill="#7a8fa8" fill-opacity="0.06" />
+        <!-- Calm purple & blue mosaic: blocks, triangles, circles, arcs -->
+        <rect x="0" y="0" width="200" height="140" fill="#3a4068" />
+        <rect x="200" y="0" width="180" height="140" fill="#4a5088" opacity="0.9" />
+        <rect x="380" y="0" width="220" height="100" fill="#5a5090" opacity="0.85" />
+        <rect x="600" y="0" width="160" height="120" fill="#4a5088" />
+        <rect x="760" y="0" width="200" height="120" fill="#3a4068" opacity="0.95" />
+        <rect x="960" y="0" width="240" height="140" fill="#5a6098" opacity="0.8" />
+        <polygon points="0,140 200,140 200,280" fill="#5a5090" opacity="0.75" />
+        <rect x="200" y="140" width="120" height="140" fill="#6b72a8" opacity="0.85" />
+        <rect x="320" y="140" width="200" height="90" fill="#4a5088" />
+        <rect x="520" y="100" width="80" height="130" fill="#7b82b8" opacity="0.7" />
+        <circle cx="620" cy="230" r="70" fill="#5a6098" opacity="0.8" />
+        <path d="M600 0 L760 0 L760 120 L600 120 Z" fill="#6b72a8" opacity="0.6" />
+        <rect x="760" y="120" width="120" height="160" fill="#4a5088" />
+        <polygon points="880,120 880,280 1000,280" fill="#6b72a8" opacity="0.85" />
+        <rect x="0" y="280" width="160" height="120" fill="#5a5090" opacity="0.8" />
+        <rect x="160" y="280" width="140" height="120" fill="#4a5088" />
+        <rect x="300" y="230" width="220" height="170" fill="#3a4068" />
+        <circle cx="400" cy="320" r="50" fill="#7b82b8" opacity="0.6" />
+        <path d="M520 230 L520 400 L740 400 L740 230 Q630 200 520 230" fill="#5a6098" opacity="0.75" />
+        <rect x="600" y="300" width="80" height="100" fill="#6b72a8" />
+        <rect x="680" y="300" width="60" height="100" fill="#8b92c8" opacity="0.65" />
+        <polygon points="740,300 800,300 800,400 740,400" fill="#4a5088" />
+        <rect x="800" y="280" width="180" height="120" fill="#5a5090" opacity="0.85" />
+        <rect x="980" y="140" width="220" height="260" fill="#3a4068" />
+        <circle cx="1080" cy="280" r="80" fill="#5a6098" opacity="0.7" />
+        <path d="M1000 400 A80 80 0 0 1 1000 560 L1000 400" fill="#6b72a8" opacity="0.8" />
+        <rect x="0" y="400" width="300" height="200" fill="#4a5088" opacity="0.9" />
+        <rect x="300" y="400" width="200" height="100" fill="#5a6098" opacity="0.75" />
+        <polygon points="300,500 500,500 500,600 300,600" fill="#6b72a8" />
+        <rect x="500" y="400" width="220" height="200" fill="#3a4068" />
+        <circle cx="610" cy="500" r="60" fill="#7b82b8" opacity="0.7" />
+        <path d="M520 400 L720 400 L720 500 Q620 520 520 500 Z" fill="#5a5090" opacity="0.8" />
+        <rect x="720" y="400" width="120" height="200" fill="#4a5088" />
+        <rect x="840" y="400" width="140" height="90" fill="#6b72a8" opacity="0.85" />
+        <polygon points="840,490 980,490 980,600 840,600" fill="#5a6098" />
+        <rect x="0" y="600" width="240" height="200" fill="#3a4068" />
+        <rect x="240" y="600" width="260" height="200" fill="#5a5090" opacity="0.85" />
+        <circle cx="370" cy="700" r="70" fill="#6b72a8" opacity="0.75" />
+        <path d="M500 600 L760 600 L760 800 L500 800 Z" fill="#4a5088" />
+        <rect x="760" y="600" width="220" height="200" fill="#3a4068" />
+        <rect x="980" y="600" width="220" height="200" fill="#5a6098" opacity="0.9" />
+        <circle cx="1080" cy="700" r="60" fill="#7b92c8" opacity="0.6" />
+        <!-- Quarter-circles / arcs -->
+        <path d="M120 450 A100 100 0 0 1 220 450 L120 450" fill="#8b92c8" opacity="0.5" />
+        <path d="M900 120 A50 50 0 0 0 900 220 L900 120" fill="#b0b5dc" opacity="0.4" />
+        <!-- Diagonal stripes accent -->
+        <rect x="340" y="420" width="160" height="80" fill="url(#stripes-diag)" />
+        <rect x="660" y="620" width="100" height="80" fill="url(#stripes-diag)" />
+        <!-- Small circles grid -->
+        <circle cx="150" cy="180" r="18" fill="#9ba2d0" opacity="0.6" />
+        <circle cx="190" cy="180" r="18" fill="#9ba2d0" opacity="0.6" />
+        <circle cx="150" cy="220" r="18" fill="#9ba2d0" opacity="0.6" />
+        <circle cx="190" cy="220" r="18" fill="#9ba2d0" opacity="0.6" />
+        <circle cx="950" cy="380" r="22" fill="#b0b5dc" opacity="0.5" />
+        <circle cx="950" cy="430" r="22" fill="#b0b5dc" opacity="0.5" />
+        <circle cx="1000" cy="380" r="22" fill="#b0b5dc" opacity="0.5" />
+        <circle cx="1000" cy="430" r="22" fill="#b0b5dc" opacity="0.5" />
+        <!-- Rings -->
+        <circle cx="520" cy="340" r="35" fill="none" stroke="#c8cce8" stroke-width="12" opacity="0.35" />
+        <circle cx="1180" cy="520" r="40" fill="none" stroke="#b0b5dc" stroke-width="14" opacity="0.4" />
+        <!-- Triangles accent -->
+        <polygon points="1180,0 1200,0 1200,60" fill="#6b72a8" opacity="0.7" />
+        <polygon points="0,800 0,760 80,800" fill="#5a6098" opacity="0.6" />
       </svg>
     </div>
 
