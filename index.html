@@ -3,23 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Calm Puzzlefi – Gentle Puzzle Moments</title>
+    <title>Calm Puzzlefi – Wind down &amp; drift off</title>
     <style>
       :root {
-        --bg: #0f172a;
-        --bg-soft: #020617;
-        --panel: #020817;
-        --accent-1: #38bdf8;
-        --accent-2: #a855f7;
-        --accent-3: #22c55e;
-        --text-main: #e5e7eb;
-        --text-soft: #9ca3af;
-        --text-softer: #6b7280;
-        --border-soft: rgba(148, 163, 184, 0.25);
-        --shadow-soft: 0 22px 60px rgba(15, 23, 42, 0.95);
-        --radius-xl: 28px;
-        --radius-lg: 20px;
+        /* Calming, low-stimulation palette — decompress & before bed */
+        --bg-deep: #1a1f2e;
+        --bg-soft: #232a3b;
+        --bg-card: rgba(35, 42, 59, 0.85);
+        --accent-sage: #8b9f8e;
+        --accent-lavender: #9a8fb5;
+        --accent-dust: #b5a898;
+        --accent-mist: #7a8fa8;
+        --text-primary: #e8e6e3;
+        --text-soft: #a8a6a1;
+        --text-softer: #6b6964;
+        --glow-soft: rgba(154, 143, 181, 0.25);
+        --glow-sage: rgba(139, 159, 142, 0.2);
+        --border-soft: rgba(168, 166, 161, 0.2);
+        --radius-blob: 32px;
         --radius-pill: 999px;
+        --font: "DM Sans", "Segoe UI", system-ui, sans-serif;
       }
 
       *,
@@ -28,35 +31,49 @@
         box-sizing: border-box;
       }
 
-      html,
-      body {
+      html, body {
         margin: 0;
         padding: 0;
-        height: 100%;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-          "SF Pro Display", "Inter", sans-serif;
-        color: var(--text-main);
-        background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #020617 100%);
+        min-height: 100%;
+        font-family: var(--font);
+        color: var(--text-primary);
+        background: var(--bg-deep);
+        overflow-x: hidden;
       }
 
-      body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
+      /* Vector shape background */
+      .page-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .page-bg svg {
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+      }
+
+      .shape-blur {
+        filter: blur(80px);
+        opacity: 0.4;
       }
 
       .page-shell {
-        max-width: 1100px;
+        position: relative;
+        z-index: 1;
+        max-width: 1000px;
         margin: 0 auto;
-        padding: 32px 20px 40px;
+        padding: 28px 24px 48px;
       }
 
+      /* Header — minimal */
       header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 40px;
+        margin-bottom: 48px;
       }
 
       .brand {
@@ -66,1277 +83,935 @@
       }
 
       .brand-mark {
-        width: 32px;
-        height: 32px;
-        border-radius: 18px;
-        background: radial-gradient(circle at 25% 20%, #38bdf8 0, #22c55e 35%, #0f172a 100%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, var(--accent-lavender), var(--accent-sage));
+        opacity: 0.9;
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
-        overflow: hidden;
       }
 
       .brand-mark svg {
-        width: 26px;
-        height: 26px;
-        opacity: 0.96;
+        width: 22px;
+        height: 22px;
+        stroke: var(--text-primary);
+        opacity: 0.95;
       }
 
-      .brand-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
+      .brand-text .name {
+        font-size: 1.1rem;
+        letter-spacing: 0.04em;
+        font-weight: 500;
       }
 
-      .brand-name {
-        font-size: 17px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .brand-tagline {
-        font-size: 11px;
+      .brand-text .tagline {
+        font-size: 0.7rem;
         color: var(--text-softer);
-        letter-spacing: 0.14em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-      }
-
-      .nav-cta {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        color: var(--text-soft);
+        margin-top: 2px;
       }
 
       .nav-pill {
+        padding: 8px 14px;
         border-radius: var(--radius-pill);
-        border: 1px solid rgba(148, 163, 184, 0.24);
-        padding: 6px 12px;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 60%),
-          linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95));
-        backdrop-filter: blur(18px);
+        font-size: 0.75rem;
+        color: var(--text-soft);
+        border: 1px solid var(--border-soft);
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
       }
 
-      .nav-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 999px;
-        background: radial-gradient(circle at 30% 30%, #22c55e 0, #166534 100%);
-        box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+      /* Hero — vector style */
+      .hero {
+        text-align: center;
+        margin-bottom: 56px;
       }
 
-      main {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
-        gap: 40px;
-        align-items: center;
+      .hero h1 {
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.25;
+        margin: 0 0 12px;
+        color: var(--text-primary);
       }
 
-      @media (max-width: 900px) {
-        main {
-          grid-template-columns: minmax(0, 1fr);
-          gap: 32px;
-        }
+      .hero p {
+        font-size: 1rem;
+        color: var(--text-soft);
+        max-width: 420px;
+        margin: 0 auto 8px;
+        line-height: 1.6;
       }
 
-      .hero-copy {
+      .hero .hint {
+        font-size: 0.8rem;
+        color: var(--text-softer);
+      }
+
+      /* Demo box — playable preview */
+      .demo-box {
+        margin-bottom: 48px;
+        border-radius: var(--radius-blob);
+        padding: 28px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-soft);
+        backdrop-filter: blur(16px);
         display: flex;
         flex-direction: column;
-        gap: 22px;
+        align-items: center;
+        gap: 16px;
       }
 
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        border-radius: var(--radius-pill);
-        border: 1px solid rgba(148, 163, 184, 0.32);
-        padding: 5px 10px 5px 5px;
-        font-size: 11px;
+      .demo-box .label {
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-        letter-spacing: 0.16em;
-        color: var(--text-soft);
-        background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.24), transparent 65%),
-          linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.96));
-        width: fit-content;
+        color: var(--text-softer);
       }
 
-      .hero-badge-orb {
-        width: 22px;
-        height: 22px;
-        border-radius: 999px;
-        background: radial-gradient(circle at 30% 20%, #38bdf8 0, #a855f7 45%, #0f172a 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 0 18px rgba(129, 140, 248, 0.9);
-      }
-
-      .hero-badge-orb svg {
-        width: 14px;
-        height: 14px;
-      }
-
-      h1 {
-        font-size: clamp(2.3rem, 3.2vw + 1.2rem, 3.3rem);
-        line-height: 1.04;
-        letter-spacing: -0.03em;
+      .demo-box .title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-primary);
         margin: 0;
       }
 
-      .hero-highlight {
-        background: linear-gradient(120deg, #38bdf8, #a855f7, #22c55e);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-
-      .hero-sub {
-        font-size: 15px;
-        line-height: 1.7;
+      .demo-box .demo-sub {
+        font-size: 0.85rem;
+        font-weight: 400;
         color: var(--text-soft);
-        max-width: 34rem;
+        margin: -8px 0 0;
       }
 
-      .hero-sub strong {
-        color: #e5e7eb;
-        font-weight: 500;
-      }
-
-      .hero-uses {
+      .demo-box .board-wrap {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px;
-        font-size: 11px;
-        color: var(--text-softer);
-        margin-top: 4px;
-      }
-
-      .hero-uses span {
-        padding: 7px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.26);
-        background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.13), transparent 65%);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      @media (max-width: 600px) {
-        .hero-uses {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-        margin-top: 4px;
-      }
-
-      .primary-btn {
-        border: none;
-        cursor: pointer;
-        border-radius: var(--radius-pill);
-        padding: 10px 18px;
-        font-size: 13px;
-        font-weight: 500;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        display: inline-flex;
-        align-items: center;
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
-        background: radial-gradient(circle at 0 0, #38bdf8 0, transparent 55%),
-          radial-gradient(circle at 100% 100%, #a855f7 0, transparent 55%),
-          linear-gradient(135deg, #0f172a, #020617);
-        color: var(--text-main);
-        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.85);
-        transition: transform 120ms ease-out, box-shadow 120ms ease-out,
-          background 160ms ease-out;
+        padding: 16px;
+        border-radius: 20px;
+        background: rgba(35, 42, 59, 0.6);
+        border: 1px solid var(--border-soft);
       }
 
-      .primary-btn span.icon {
-        width: 18px;
-        height: 18px;
-        border-radius: 999px;
-        display: inline-flex;
+      .demo-box .tile {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        display: flex;
         align-items: center;
         justify-content: center;
-        background: radial-gradient(circle at 30% 20%, #22c55e 0, #38bdf8 55%, #0f172a 100%);
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s;
+        border: 1px solid var(--border-soft);
       }
 
-      .primary-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 22px 45px rgba(15, 23, 42, 0.9);
+      .demo-box .tile:hover {
+        transform: scale(1.04);
       }
 
-      .ghost-link {
-        border-radius: var(--radius-pill);
-        padding: 9px 14px;
-        font-size: 13px;
-        color: var(--text-soft);
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        background: linear-gradient(
-          135deg,
-          rgba(15, 23, 42, 0.95),
-          rgba(15, 23, 42, 0.9)
-        );
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+      .demo-box .tile.shape-circle {
+        background: linear-gradient(145deg, var(--accent-mist), transparent);
       }
 
-      .ghost-link-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 999px;
-        background: #38bdf8;
+      .demo-box .tile.shape-square {
+        background: linear-gradient(145deg, var(--accent-lavender), transparent);
       }
 
-      .reassurance {
-        margin-top: 6px;
-        font-size: 11px;
-        color: var(--text-softer);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
+      .demo-box .tile.shape-triangle {
+        background: linear-gradient(145deg, var(--accent-sage), transparent);
       }
 
-      .reassurance span {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .reassurance svg {
-        width: 14px;
-        height: 14px;
-      }
-
-      .hero-visual {
-        position: relative;
-        align-self: stretch;
-      }
-
-      .visual-card {
-        position: relative;
-        height: 100%;
-        min-height: 320px;
-        border-radius: var(--radius-xl);
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        background:
-          radial-gradient(circle at 20% 0, rgba(56, 189, 248, 0.26), transparent 65%),
-          radial-gradient(circle at 80% 100%, rgba(34, 197, 94, 0.22), transparent 60%),
-          linear-gradient(145deg, #020617, #020617 45%, #020617 100%);
-        box-shadow: var(--shadow-soft);
-        padding: 18px 18px 20px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-      }
-
-      @media (max-width: 900px) {
-        .visual-card {
-          min-height: 260px;
-        }
-      }
-
-      .visual-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 11px;
-        color: var(--text-soft);
-      }
-
-      .visual-header-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .visual-emoji-orb {
+      .demo-box .tile svg {
         width: 26px;
         height: 26px;
-        border-radius: 999px;
-        background: radial-gradient(circle at 35% 25%, #22c55e 0, #38bdf8 40%, #0f172a 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
+        stroke: var(--text-primary);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.9;
       }
 
-      .visual-header-pills {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
+      .demo-box .cta {
+        font-size: 0.8rem;
+        color: var(--accent-lavender);
+        margin: 0;
       }
 
-      .visual-header-pill {
-        padding: 4px 9px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.42);
-        background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.2), transparent 70%);
+      .demo-box .cta button {
+        background: none;
+        border: none;
+        color: inherit;
+        font-family: var(--font);
+        font-size: inherit;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0;
       }
 
-      .visual-mock {
-        flex: 1;
+      .demo-box .cta button:hover {
+        opacity: 0.9;
+      }
+
+      /* Game cards — vector blob layout */
+      .games-hub {
         display: grid;
-        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-        gap: 16px;
-        align-items: stretch;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-bottom: 40px;
       }
 
-      @media (max-width: 600px) {
-        .visual-mock {
-          grid-template-columns: minmax(0, 1fr);
-        }
-      }
-
-      .visual-main-board {
-        border-radius: var(--radius-lg);
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.26), transparent 65%),
-          linear-gradient(145deg, #020617, #020617 55%, #020617 100%);
-        padding: 12px 12px 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .visual-main-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 11px;
-        color: var(--text-soft);
-      }
-
-      .visual-main-tag {
-        padding: 4px 8px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        background: rgba(15, 23, 42, 0.9);
-      }
-
-      .visual-grid-shell {
-        flex: 1;
-        border-radius: 18px;
-        border: 1px solid rgba(148, 163, 184, 0.55);
-        padding: 8px 8px 10px;
-        background: radial-gradient(circle at 50% 0, rgba(56, 189, 248, 0.16), transparent 60%),
-          linear-gradient(160deg, #020617, #020617 55%, #020617 100%);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .visual-grid-shell::before {
-        content: "";
-        position: absolute;
-        inset: 18% 12% auto;
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(148, 163, 184, 0.5),
-          transparent
-        );
-        opacity: 0.4;
-      }
-
-      .visual-grid-shell::after {
-        content: "";
-        position: absolute;
-        inset: auto 18% 22%;
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(148, 163, 184, 0.5),
-          transparent
-        );
-        opacity: 0.4;
-      }
-
-      .tile-grid {
-        position: relative;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 6px;
-      }
-
-      .tile {
-        aspect-ratio: 1 / 1;
-        border-radius: 14px;
-        border: 1px solid rgba(148, 163, 184, 0.5);
-        background: radial-gradient(circle at 30% 20%, #38bdf8 0, #0f172a 45%, #020617 100%);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .tile--soft {
-        background: radial-gradient(circle at 25% 15%, #a855f7 0, #0f172a 45%, #020617 100%);
-      }
-
-      .tile--quiet {
-        background: radial-gradient(circle at 30% 15%, #22c55e 0, #0f172a 45%, #020617 100%);
-      }
-
-      .tile-icon {
-        position: absolute;
-        inset: 14%;
-      }
-
-      .tile-icon svg {
-        width: 100%;
-        height: 100%;
-      }
-
-      .tile-halo {
-        position: absolute;
-        inset: 6%;
-        border-radius: 16px;
-        border: 1px solid rgba(148, 163, 184, 0.55);
-        opacity: 0.8;
-      }
-
-      .tile-floating {
-        position: absolute;
-        right: 4%;
-        top: 46%;
-        width: 32%;
-        aspect-ratio: 1 / 1;
-        border-radius: 16px;
-        border: 1px solid rgba(56, 189, 248, 0.85);
-        background: radial-gradient(circle at 20% 20%, #38bdf8 0, #0f172a 50%);
-        box-shadow: 0 14px 26px rgba(15, 23, 42, 0.9);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .tile-floating svg {
-        width: 70%;
-        height: 70%;
-      }
-
-      .visual-side {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .visual-session {
-        border-radius: var(--radius-lg);
-        border: 1px solid rgba(148, 163, 184, 0.48);
-        padding: 10px 11px;
-        background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.24), transparent 60%),
-          linear-gradient(150deg, #020617, #020617 60%, #020617 100%);
-        font-size: 11px;
-        color: var(--text-soft);
-      }
-
-      .visual-session-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-        margin-bottom: 6px;
-      }
-
-      .visual-session-title {
-        font-size: 11px;
-        color: #e5e7eb;
-      }
-
-      .visual-session-chip {
-        padding: 3px 7px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.6);
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      .visual-session-bar {
-        position: relative;
-        height: 5px;
-        border-radius: 999px;
-        overflow: hidden;
-        background: rgba(15, 23, 42, 0.95);
-        margin-top: 4px;
-      }
-
-      .visual-session-bar-fill {
-        position: absolute;
-        inset: 0;
-        width: 68%;
-        background: linear-gradient(90deg, #22c55e, #38bdf8);
-      }
-
-      .visual-note {
-        margin-top: 8px;
-        font-size: 10px;
-        color: var(--text-softer);
-      }
-
-      .visual-chips {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-      }
-
-      .visual-chip {
-        border-radius: 16px;
-        border: 1px solid rgba(148, 163, 184, 0.5);
-        padding: 8px 9px;
-        background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.35), transparent 70%);
-        font-size: 10px;
-        color: var(--text-soft);
-      }
-
-      .visual-chip strong {
-        display: block;
-        font-size: 11px;
-        color: #e5e7eb;
-        margin-bottom: 2px;
-      }
-
-      .visual-chip--night {
-        background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.26), transparent 70%);
-      }
-
-      .visual-chip--room {
-        background: radial-gradient(circle at 0 0, rgba(168, 85, 247, 0.3), transparent 70%);
-      }
-
-      .visual-floating-tag {
-        position: absolute;
-        right: 22px;
-        top: 18px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.7);
-        font-size: 10px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(
-          135deg,
-          rgba(15, 23, 42, 0.98),
-          rgba(15, 23, 42, 0.95)
-        );
-        backdrop-filter: blur(18px);
-      }
-
-      .visual-floating-tag-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 999px;
-        background: #22c55e;
-        box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
-      }
-
-      .games-section {
-        margin-top: 40px;
-        border-radius: var(--radius-xl);
-        border: 1px solid var(--border-soft);
-        background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.28), transparent 65%),
-          linear-gradient(135deg, #020617, #020617 50%, #020617 100%);
-        box-shadow: var(--shadow-soft);
-        padding: 18px 18px 16px;
-      }
-
-      .games-header {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        align-items: flex-start;
-        margin-bottom: 16px;
-      }
-
-      .games-title {
-        font-size: 13px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--text-soft);
-      }
-
-      .games-sub {
-        font-size: 12px;
-        color: var(--text-soft);
-        max-width: 420px;
-      }
-
-      .games-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-      }
-
-      @media (max-width: 900px) {
-        .games-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      @media (max-width: 640px) {
-        .games-grid {
-          grid-template-columns: minmax(0, 1fr);
+      @media (max-width: 800px) {
+        .games-hub {
+          grid-template-columns: 1fr;
+          gap: 20px;
         }
       }
 
       .game-card {
-        border-radius: 18px;
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.18), transparent 60%),
-          linear-gradient(150deg, #020617, #020617 55%, #020617 100%);
-        padding: 10px 11px;
-        display: flex;
-        flex-direction: column;
-        gap: 9px;
+        --card-accent: var(--accent-mist);
         position: relative;
+        border-radius: var(--radius-blob);
+        padding: 28px 24px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-soft);
+        backdrop-filter: blur(16px);
+        cursor: pointer;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
         overflow: hidden;
       }
 
-      .game-card:nth-child(2) {
-        background: radial-gradient(circle at 0 0, rgba(168, 85, 247, 0.22), transparent 60%),
-          linear-gradient(150deg, #020617, #020617 55%, #020617 100%);
+      .game-card::before {
+        content: "";
+        position: absolute;
+        top: -40%;
+        right: -30%;
+        width: 80%;
+        height: 80%;
+        border-radius: 50%;
+        background: var(--card-accent);
+        opacity: 0.12;
+        pointer-events: none;
       }
 
-      .game-card:nth-child(3) {
-        background: radial-gradient(circle at 0 0, rgba(34, 197, 94, 0.26), transparent 60%),
-          linear-gradient(150deg, #020617, #020617 55%, #020617 100%);
+      .game-card:nth-child(1) { --card-accent: var(--accent-mist); }
+      .game-card:nth-child(2) { --card-accent: var(--accent-lavender); }
+      .game-card:nth-child(3) { --card-accent: var(--accent-sage); }
+
+      .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       }
 
-      .game-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .game-icon-orb {
-        width: 30px;
-        height: 30px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.7);
+      .game-card .icon-wrap {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, var(--card-accent), transparent);
+        opacity: 0.9;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: radial-gradient(circle at 30% 25%, #38bdf8 0, #0f172a 55%, #020617 100%);
+        margin-bottom: 16px;
       }
 
-      .game-icon-orb svg {
-        width: 18px;
-        height: 18px;
+      .game-card .icon-wrap svg {
+        width: 28px;
+        height: 28px;
+        stroke: var(--text-primary);
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
-      .game-title {
-        font-size: 14px;
+      .game-card .title {
+        font-size: 1.15rem;
         font-weight: 500;
+        margin: 0 0 4px;
       }
 
-      .game-tagline {
-        font-size: 11px;
-        color: var(--text-softer);
-      }
-
-      .game-copy {
-        font-size: 12px;
+      .game-card .tagline {
+        font-size: 0.8rem;
         color: var(--text-soft);
-        line-height: 1.6;
+        margin: 0 0 12px;
       }
 
-      .game-meta {
-        display: flex;
-        justify-content: space-between;
+      .game-card .time {
+        font-size: 0.75rem;
+        color: var(--text-softer);
+      }
+
+      /* Game view (full screen overlay) */
+      .game-view {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: var(--bg-deep);
+        flex-direction: column;
         align-items: center;
-        font-size: 10px;
-        color: var(--text-softer);
-        margin-top: 2px;
+        justify-content: center;
+        padding: 24px;
       }
 
-      .pill-list {
+      .game-view.active {
         display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
       }
 
-      .pill-list span {
-        padding: 3px 7px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.5);
+      .game-view .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        padding: 10px 18px;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border-soft);
+        background: var(--bg-card);
+        color: var(--text-soft);
+        font-family: var(--font);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: color 0.2s, border-color 0.2s;
       }
 
-      .game-meta-time {
-        padding: 3px 7px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.5);
+      .game-view .back-btn:hover {
+        color: var(--text-primary);
+        border-color: var(--text-softer);
       }
 
-      footer {
-        font-size: 10px;
-        color: var(--text-softer);
-        margin-top: 18px;
-        display: flex;
-        justify-content: space-between;
+      .game-view .game-title {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-soft);
+      }
+
+      /* ——— Drift Tiles ——— */
+      #game-drift .board-wrap {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
-        align-items: baseline;
+        padding: 20px;
+        border-radius: 24px;
+        background: rgba(35, 42, 59, 0.6);
+        border: 1px solid var(--border-soft);
       }
 
-      footer span {
-        white-space: nowrap;
+      #game-drift .tile {
+        width: 72px;
+        height: 72px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s;
+        border: 1px solid var(--border-soft);
       }
 
-      footer a {
-        color: #a5b4fc;
-        text-decoration: none;
+      #game-drift .tile:hover {
+        transform: scale(1.03);
       }
 
-      footer a:hover {
-        text-decoration: underline;
+      #game-drift .tile.shape-circle {
+        background: linear-gradient(145deg, var(--accent-mist), transparent);
+      }
+
+      #game-drift .tile.shape-square {
+        background: linear-gradient(145deg, var(--accent-lavender), transparent);
+      }
+
+      #game-drift .tile.shape-triangle {
+        background: linear-gradient(145deg, var(--accent-sage), transparent);
+      }
+
+      #game-drift .tile svg {
+        width: 36px;
+        height: 36px;
+        stroke: var(--text-primary);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.9;
+      }
+
+      #game-drift .hint {
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: var(--text-softer);
+      }
+
+      /* ——— Soft Loops ——— */
+      #game-loops .loop-canvas-wrap {
+        width: 280px;
+        height: 280px;
+        position: relative;
+        border-radius: 50%;
+        background: rgba(35, 42, 59, 0.5);
+        border: 1px solid var(--border-soft);
+      }
+
+      #game-loops canvas {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        cursor: crosshair;
+      }
+
+      #game-loops .hint {
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: var(--text-softer);
+      }
+
+      /* ——— Gentle Merge ——— */
+      #game-merge .merge-board {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        padding: 20px;
+        border-radius: 24px;
+        background: rgba(35, 42, 59, 0.6);
+        border: 1px solid var(--border-soft);
+      }
+
+      #game-merge .cell {
+        width: 58px;
+        height: 58px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.15s, box-shadow 0.15s;
+        border: 1px solid var(--border-soft);
+      }
+
+      #game-merge .cell:hover:not(.empty) {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px var(--glow-soft);
+      }
+
+      #game-merge .cell.empty {
+        background: transparent;
+        cursor: default;
+      }
+
+      #game-merge .cell.shape-a {
+        background: linear-gradient(145deg, var(--accent-lavender), transparent);
+      }
+
+      #game-merge .cell.shape-b {
+        background: linear-gradient(145deg, var(--accent-sage), transparent);
+      }
+
+      #game-merge .cell.shape-c {
+        background: linear-gradient(145deg, var(--accent-dust), transparent);
+      }
+
+      #game-merge .cell svg {
+        width: 28px;
+        height: 28px;
+        stroke: var(--text-primary);
+        fill: none;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.95;
+      }
+
+      #game-merge .hint {
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: var(--text-softer);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--text-softer);
+        margin-top: 24px;
       }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <!-- Vector shape background -->
+    <div class="page-bg" aria-hidden="true">
+      <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="blob1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#9a8fb5" stop-opacity="0.35" />
+            <stop offset="100%" stop-color="#7a8fa8" stop-opacity="0.15" />
+          </linearGradient>
+          <linearGradient id="blob2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#8b9f8e" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="#9a8fb5" stop-opacity="0.1" />
+          </linearGradient>
+          <linearGradient id="blob3" x1="50%" y1="100%" x2="50%" y2="0%">
+            <stop offset="0%" stop-color="#b5a898" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#8b9f8e" stop-opacity="0.1" />
+          </linearGradient>
+        </defs>
+        <circle class="shape-blur" cx="200" cy="120" r="180" fill="url(#blob1)" />
+        <circle class="shape-blur" cx="1000" cy="400" r="220" fill="url(#blob2)" />
+        <circle class="shape-blur" cx="600" cy="680" r="160" fill="url(#blob3)" />
+        <circle cx="150" cy="600" r="80" fill="#8b9f8e" fill-opacity="0.08" />
+        <circle cx="950" cy="150" r="60" fill="#9a8fb5" fill-opacity="0.1" />
+        <circle cx="600" cy="200" r="100" fill="#7a8fa8" fill-opacity="0.06" />
+      </svg>
+    </div>
+
     <div class="page-shell">
       <header>
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 32 32">
-              <defs>
-                <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#38bdf8" />
-                  <stop offset="0.5" stop-color="#a855f7" />
-                  <stop offset="1" stop-color="#22c55e" />
-                </linearGradient>
-              </defs>
-              <rect
-                x="6"
-                y="6"
-                width="20"
-                height="20"
-                rx="4.5"
-                stroke="url(#brandGrad)"
-                stroke-width="1.4"
-                fill="none"
-              />
-              <path
-                d="M11 16c0-2.2 1.8-4 4-4h2a4 4 0 0 1 0 8h-2"
-                fill="none"
-                stroke="url(#brandGrad)"
-                stroke-linecap="round"
-                stroke-width="1.4"
-              />
-              <circle cx="13" cy="18.5" r="1.1" fill="#e5e7eb" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 4v16M4 12h16" stroke-linecap="round" />
+              <circle cx="12" cy="12" r="3" />
             </svg>
           </div>
           <div class="brand-text">
-            <div class="brand-name">Calm Puzzlefi</div>
-            <div class="brand-tagline">Puzzle moments for softer days</div>
+            <div class="name">Calm Puzzlefi</div>
+            <div class="tagline">Wind down · drift off</div>
           </div>
         </div>
-        <div class="nav-cta">
-          <div class="nav-pill">
-            <span class="nav-dot"></span>
-            Early concept · 3 slow puzzle games
-          </div>
-        </div>
+        <div class="nav-pill">No timers · no scores · just calm</div>
       </header>
 
-      <main>
-        <section class="hero-copy" aria-label="Calm puzzle introduction">
-          <div class="hero-badge">
-            <div class="hero-badge-orb" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  fill="none"
-                  stroke="#e5e7eb"
-                  stroke-width="1.4"
-                  stroke-opacity="0.9"
-                />
-                <path
-                  d="M8 12.5 10.5 15 16 9.5"
-                  fill="none"
-                  stroke="#22c55e"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.6"
-                />
-              </svg>
-            </div>
-            Designed for winding down — not winding up
-          </div>
-
-          <h1>
-            Gentle puzzles<br />
-            for a
-            <span class="hero-highlight">quieter mind</span>
-          </h1>
-
-          <p class="hero-sub">
-            Calm Puzzlefi is a small collection of
-            <strong>deliberately slow, visually soft puzzle games</strong> for
-            people who want something to do with their hands while their mind
-            unwinds — before sleep, between meetings, or in a waiting room.
-            No timers, no streaks, no pressure.
-          </p>
-
-          <div class="hero-uses" aria-label="Calm puzzle use cases">
-            <span>Ease into sleep</span>
-            <span>Reset between long days</span>
-            <span>Soften waiting-room time</span>
-          </div>
-
-          <div class="hero-actions">
-            <button class="primary-btn" type="button">
-              Explore the 3 games
-              <span class="icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M8.5 7.5h7v7"
-                    fill="none"
-                    stroke="#e5e7eb"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M8.5 15.5 15.5 8.5"
-                    fill="none"
-                    stroke="#e5e7eb"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </span>
-            </button>
-            <div class="ghost-link">
-              <span class="ghost-link-dot" aria-hidden="true"></span>
-              Unisex, screen‑soft, sound‑optional
-            </div>
-          </div>
-
-          <div class="reassurance">
-            <span>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  fill="none"
-                  stroke="#22c55e"
-                  stroke-width="1.4"
-                  stroke-opacity="0.8"
-                />
-                <path
-                  d="M9 12.2 10.8 14 15 10"
-                  fill="none"
-                  stroke="#22c55e"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              No scores, streaks, or countdowns
-            </span>
-            <span>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M4.5 8.8C4.5 6.7 6 5 8 5c1.1 0 2.2.5 3 1.5C11.8 5.5 12.9 5 14 5c2 0 3.5 1.7 3.5 3.8 0 3.2-3 5.4-5.9 7.1-.4.2-.9.2-1.2 0-2.9-1.7-5.9-3.9-5.9-7.1Z"
-                  fill="none"
-                  stroke="#9ca3af"
-                  stroke-width="1.5"
-                />
-              </svg>
-              Created for anxious, tired, or busy brains
-            </span>
-          </div>
-        </section>
-
-        <section class="hero-visual" aria-label="Preview of Calm Puzzlefi games">
-          <div class="visual-card">
-            <div class="visual-header">
-              <div class="visual-header-left">
-                <div class="visual-emoji-orb" aria-hidden="true">⋯</div>
-                <div>
-                  <div style="font-size: 11px; color: #e5e7eb">
-                    Tonight’s wind‑down
-                  </div>
-                  <div style="font-size: 10px; color: var(--text-softer)">
-                    3 slow games · 18–22 quiet minutes
-                  </div>
-                </div>
-              </div>
-              <div class="visual-header-pills" aria-hidden="true">
-                <div class="visual-header-pill">No rush</div>
-                <div class="visual-header-pill">Low light</div>
-              </div>
-            </div>
-
-            <div class="visual-mock">
-              <div class="visual-main-board" aria-hidden="true">
-                <div class="visual-main-header">
-                  <span class="visual-main-tag">Drift Tiles</span>
-                  <span style="font-size: 10px; color: var(--text-softer)">
-                    Slide shapes until they hum
-                  </span>
-                </div>
-                <div class="visual-grid-shell">
-                  <div class="tile-grid">
-                    <div class="tile">
-                      <div class="tile-halo"></div>
-                      <div class="tile-icon">
-                        <svg viewBox="0 0 32 32">
-                          <circle
-                            cx="16"
-                            cy="16"
-                            r="7.4"
-                            fill="none"
-                            stroke="#e5e7eb"
-                            stroke-width="1.5"
-                            stroke-opacity="0.9"
-                          />
-                          <path
-                            d="M16 10.5v11"
-                            stroke="#e5e7eb"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                          />
-                          <path
-                            d="M11 16h10"
-                            stroke="#e5e7eb"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="tile tile--soft">
-                      <div class="tile-halo"></div>
-                      <div class="tile-icon">
-                        <svg viewBox="0 0 32 32">
-                          <rect
-                            x="8.5"
-                            y="8.5"
-                            width="15"
-                            height="15"
-                            rx="3.4"
-                            fill="none"
-                            stroke="#e5e7eb"
-                            stroke-width="1.5"
-                            stroke-opacity="0.95"
-                          />
-                          <path
-                            d="M11.5 19.5 16 13.5l4.5 6"
-                            fill="none"
-                            stroke="#e5e7eb"
-                            stroke-width="1.6"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="tile tile--quiet">
-                      <div class="tile-halo"></div>
-                      <div class="tile-icon">
-                        <svg viewBox="0 0 32 32">
-                          <path
-                            d="M10.5 12.5c0-2 1.6-3.6 3.6-3.6h3.8c2 0 3.6 1.6 3.6 3.6v3c0 2-1.6 3.6-3.6 3.6h-1.2l-2.5 2.4"
-                            fill="none"
-                            stroke="#e5e7eb"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="tile tile--soft">
-                      <div class="tile-icon">
-                        <svg viewBox="0 0 32 32">
-                          <path
-                            d="M9.5 16c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5-2.9 6.5-6.5 6.5-6.5-2.9-6.5-6.5Z"
-                            fill="none"
-                            stroke="#e5e7eb"
-                            stroke-width="1.5"
-                          />
-                          <circle cx="16" cy="16" r="2.3" fill="#e5e7eb" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="tile">
-                      <div class="tile-icon">
-                        <svg viewBox="0 0 32 32">
-                          <path
-                            d="M11 20.5 16 10.5l5 10"
-                            fill="none"
-                            stroke="#e5e7eb"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="tile tile--quiet">
-                      <div class="tile-icon">
-                        <svg viewBox="0 0 32 32">
-                          <path
-                            d="M11 12.5h10M11 19.5h6"
-                            stroke="#e5e7eb"
-                            stroke-width="1.6"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tile-floating">
-                    <svg viewBox="0 0 32 32">
-                      <circle
-                        cx="16"
-                        cy="16"
-                        r="8"
-                        fill="none"
-                        stroke="#e5e7eb"
-                        stroke-width="1.4"
-                        stroke-opacity="0.95"
-                      />
-                      <path
-                        d="M12.8 18.5c.5.8 1.4 1.3 2.4 1.3 1.8 0 3.3-1.4 3.3-3.2 0-1.8-1.5-3.2-3.3-3.2-.9 0-1.7.4-2.3 1"
-                        fill="none"
-                        stroke="#e5e7eb"
-                        stroke-width="1.4"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <div class="visual-side">
-                <div class="visual-session" aria-label="Session example: Quiet 20-minute night">
-                  <div class="visual-session-row">
-                    <div>
-                      <div class="visual-session-title">
-                        Quiet 20‑minute night
-                      </div>
-                      <div style="font-size: 10px; color: var(--text-softer)">
-                        Drift Tiles → Soft Loops → Gentle Merge
-                      </div>
-                    </div>
-                    <div class="visual-session-chip">
-                      <span
-                        style="
-                          width: 8px;
-                          height: 8px;
-                          border-radius: 999px;
-                          background: #22c55e;
-                          box-shadow: 0 0 10px rgba(34, 197, 94, 0.85);
-                        "
-                      ></span>
-                      <span>Wind‑down on track</span>
-                    </div>
-                  </div>
-                  <div class="visual-session-bar" aria-hidden="true">
-                    <div class="visual-session-bar-fill"></div>
-                  </div>
-                  <div class="visual-note">
-                    Visual, timer‑free pacing — stop whenever your mind feels softer.
-                  </div>
-                </div>
-
-                <div class="visual-chips" aria-hidden="true">
-                  <div class="visual-chip visual-chip--night">
-                    <strong>Night‑time friendly</strong>
-                    Low‑contrast palettes and gentle glow that won’t wake your brain back up.
-                  </div>
-                  <div class="visual-chip visual-chip--room">
-                    <strong>Waiting‑room ready</strong>
-                    Calm interactions that don’t need sound or full attention to feel satisfying.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="visual-floating-tag">
-              <span class="visual-floating-tag-dot" aria-hidden="true"></span>
-              Slow‑paced by design · gender‑neutral visuals
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <section class="games-section" aria-label="The three calming puzzle games">
-        <div class="games-header">
-          <div>
-            <div class="games-title">Three small games · One calm arc</div>
-          </div>
-          <p class="games-sub">
-            Each game is made to feel like a
-            <strong style="color: #e5e7eb; font-weight: 500"
-              >soft corner for your mind</strong
-            >: no hard fails, no rapid tapping, just slow decisions and quiet feedback.
-            Play one, two, or drift through all three.
-          </p>
-        </div>
-
-        <div class="games-grid">
-          <article class="game-card">
-            <div class="game-header">
-              <div class="game-icon-orb" aria-hidden="true">
-                <svg viewBox="0 0 32 32">
-                  <rect
-                    x="8"
-                    y="8"
-                    width="16"
-                    height="16"
-                    rx="4"
-                    fill="none"
-                    stroke="#e5e7eb"
-                    stroke-width="1.5"
-                    stroke-opacity="0.9"
-                  />
-                  <path
-                    d="M11.5 17.5 14.5 20l6-7"
-                    fill="none"
-                    stroke="#38bdf8"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div class="game-title">Drift Tiles</div>
-                <div class="game-tagline">Soft sliding, subtle matches</div>
-              </div>
-            </div>
-            <p class="game-copy">
-              Gently slide glowing tiles into place to complete quiet patterns. There’s
-              no “wrong” move — pieces simply drift back, inviting you to try a slower
-              path until the board settles into balance.
-            </p>
-            <div class="game-meta">
-              <div class="pill-list">
-                <span>Short loops</span>
-                <span>No fail state</span>
-              </div>
-              <div class="game-meta-time">4–7 calm minutes</div>
-            </div>
-          </article>
-
-          <article class="game-card">
-            <div class="game-header">
-              <div class="game-icon-orb" aria-hidden="true">
-                <svg viewBox="0 0 32 32">
-                  <circle
-                    cx="16"
-                    cy="16"
-                    r="8"
-                    fill="none"
-                    stroke="#e5e7eb"
-                    stroke-width="1.5"
-                    stroke-opacity="0.95"
-                  />
-                  <path
-                    d="M12 16a4 4 0 0 1 4-4"
-                    fill="none"
-                    stroke="#a855f7"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M16 20a4 4 0 0 1-4-4"
-                    fill="none"
-                    stroke="#a855f7"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div class="game-title">Soft Loops</div>
-                <div class="game-tagline">Trace slow, satisfying circles</div>
-              </div>
-            </div>
-            <p class="game-copy">
-              Connect drifting points into gentle, continuous loops. Lines softly glow
-              as they close, encouraging rhythmic, almost meditative tracing that
-              naturally slows your breathing without asking.
-            </p>
-            <div class="game-meta">
-              <div class="pill-list">
-                <span>Breath‑friendly pace</span>
-                <span>One‑hand play</span>
-              </div>
-              <div class="game-meta-time">6–8 quiet minutes</div>
-            </div>
-          </article>
-
-          <article class="game-card">
-            <div class="game-header">
-              <div class="game-icon-orb" aria-hidden="true">
-                <svg viewBox="0 0 32 32">
-                  <path
-                    d="M10 13.5c0-1.9 1.6-3.5 3.5-3.5h5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H14"
-                    fill="none"
-                    stroke="#22c55e"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M22 18.5c0 1.9-1.6 3.5-3.5 3.5h-5C12.1 22 11 20.9 11 19.5S12.1 17 13.5 17H18"
-                    fill="none"
-                    stroke="#22c55e"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div class="game-title">Gentle Merge</div>
-                <div class="game-tagline">Combine pieces, never punished</div>
-              </div>
-            </div>
-            <p class="game-copy">
-              Nudge matching shapes together to watch them softly merge and simplify
-              the board. Instead of “game over”, the board just breathes out and
-              resets, ready for as much or as little focus as you have to give.
-            </p>
-            <div class="game-meta">
-              <div class="pill-list">
-                <span>Pause anytime</span>
-                <span>Easy to resume</span>
-              </div>
-              <div class="game-meta-time">5–10 easy minutes</div>
-            </div>
-          </article>
-        </div>
-
-        <footer>
-          <span>Concept art · not yet released</span>
-          <span>Interested in testing? This will become an invite‑only early access.</span>
-        </footer>
+      <section class="hero">
+        <h1>Three gentle puzzles for a quieter mind</h1>
+        <p>Designed for decompressing after the day and easing into sleep. No rush, no fail — just soft shapes and slow decisions.</p>
+        <p class="hint">Pick one and take your time.</p>
       </section>
+
+      <section class="demo-box" aria-label="Try Drift Tiles demo">
+        <span class="label">Quick demo</span>
+        <h2 class="title">Drift Tiles</h2>
+        <p class="demo-sub">Tap a tile to drift its row and column</p>
+        <div class="board-wrap" id="demo-board">
+          <div class="tile shape-circle" data-idx="0"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg></div>
+          <div class="tile shape-square" data-idx="1"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg></div>
+          <div class="tile shape-triangle" data-idx="2"><svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg></div>
+          <div class="tile shape-square" data-idx="3"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg></div>
+          <div class="tile shape-circle" data-idx="4"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg></div>
+          <div class="tile shape-triangle" data-idx="5"><svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg></div>
+          <div class="tile shape-triangle" data-idx="6"><svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg></div>
+          <div class="tile shape-circle" data-idx="7"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg></div>
+          <div class="tile shape-square" data-idx="8"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg></div>
+        </div>
+        <p class="cta"><button type="button" id="demo-play-full">Play full game →</button></p>
+      </section>
+
+      <div class="games-hub">
+        <article class="game-card" data-game="drift" role="button" tabindex="0">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3" /><path d="M9 12h6M12 9v6" /></svg>
+          </div>
+          <h2 class="title">Drift Tiles</h2>
+          <p class="tagline">Slide shapes until they align</p>
+          <p class="time">~5 min · no fail</p>
+        </article>
+        <article class="game-card" data-game="loops" role="button" tabindex="0">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><path d="M12 6v6l4 2" stroke-width="1.2" /></svg>
+          </div>
+          <h2 class="title">Soft Loops</h2>
+          <p class="tagline">Trace slow, satisfying circles</p>
+          <p class="time">~6 min · breath-friendly</p>
+        </article>
+        <article class="game-card" data-game="merge" role="button" tabindex="0">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M8 12h8M12 8v8" /><circle cx="12" cy="12" r="2.5" /></svg>
+          </div>
+          <h2 class="title">Gentle Merge</h2>
+          <p class="tagline">Combine matching shapes</p>
+          <p class="time">~5 min · pause anytime</p>
+        </article>
+      </div>
+
+      <footer>
+        Low-contrast, screen-soft · best in dim light before bed
+      </footer>
     </div>
+
+    <!-- Game 1: Drift Tiles -->
+    <div id="game-drift" class="game-view" aria-label="Drift Tiles game">
+      <button type="button" class="back-btn" data-back>← Back</button>
+      <span class="game-title">Drift Tiles</span>
+      <div class="board-wrap">
+        <div class="tile shape-circle" data-idx="0"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg></div>
+        <div class="tile shape-square" data-idx="1"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg></div>
+        <div class="tile shape-triangle" data-idx="2"><svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg></div>
+        <div class="tile shape-square" data-idx="3"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg></div>
+        <div class="tile shape-circle" data-idx="4"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg></div>
+        <div class="tile shape-triangle" data-idx="5"><svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg></div>
+        <div class="tile shape-triangle" data-idx="6"><svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg></div>
+        <div class="tile shape-circle" data-idx="7"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg></div>
+        <div class="tile shape-square" data-idx="8"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg></div>
+      </div>
+      <p class="hint">Tap a row or column to drift tiles. Align three of the same shape in a row to soften the board.</p>
+    </div>
+
+    <!-- Game 2: Soft Loops -->
+    <div id="game-loops" class="game-view" aria-label="Soft Loops game">
+      <button type="button" class="back-btn" data-back>← Back</button>
+      <span class="game-title">Soft Loops</span>
+      <div class="loop-canvas-wrap">
+        <canvas id="loops-canvas" width="280" height="280"></canvas>
+      </div>
+      <p class="hint">Drag to connect the dots in a gentle loop. Release to close the circle and watch it glow.</p>
+    </div>
+
+    <!-- Game 3: Gentle Merge -->
+    <div id="game-merge" class="game-view" aria-label="Gentle Merge game">
+      <button type="button" class="back-btn" data-back>← Back</button>
+      <span class="game-title">Gentle Merge</span>
+      <div class="merge-board" id="merge-board"></div>
+      <p class="hint">Tap two adjacent matching shapes to merge them. Simplify the board at your own pace.</p>
+    </div>
+
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const views = {
+          hub: document.querySelector(".page-shell"),
+          drift: document.getElementById("game-drift"),
+          loops: document.getElementById("game-loops"),
+          merge: document.getElementById("game-merge"),
+        };
+
+        function showView(key) {
+          Object.keys(views).forEach(function (k) {
+            const el = views[k];
+            if (!el) return;
+            if (k === "hub") {
+              el.style.display = key === "hub" ? "" : "none";
+            } else {
+              el.classList.toggle("active", k === key);
+            }
+          });
+          if (key === "loops") initLoops();
+          if (key === "merge") initMerge();
+        }
+
+        document.querySelectorAll(".game-card").forEach(function (card) {
+          card.addEventListener("click", function () {
+            const g = card.getAttribute("data-game");
+            if (g) showView(g);
+          });
+          card.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              card.click();
+            }
+          });
+        });
+
+        document.querySelectorAll(".game-view [data-back]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            showView("hub");
+          });
+        });
+
+        var demoPlayFull = document.getElementById("demo-play-full");
+        if (demoPlayFull) {
+          demoPlayFull.addEventListener("click", function () {
+            showView("drift");
+          });
+        }
+
+        var SHAPES = ["circle", "square", "triangle"];
+
+        // ——— Demo box: mini Drift Tiles (own state) ———
+        var demoBoard = [0, 1, 2, 1, 0, 2, 2, 0, 1];
+        var demoEls = document.querySelectorAll("#demo-board .tile");
+
+        function demoDriftSvg(s) {
+          if (s === 0) return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg>';
+          if (s === 1) return '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>';
+          return '<svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg>';
+        }
+
+        function demoDriftRender() {
+          demoBoard.forEach(function (s, i) {
+            var el = demoEls[i];
+            if (!el) return;
+            el.className = "tile shape-" + SHAPES[s];
+            el.innerHTML = demoDriftSvg(s);
+          });
+        }
+
+        function demoSlide(isRow, index) {
+          if (isRow) {
+            var i0 = index * 3;
+            var a = demoBoard[i0], b = demoBoard[i0 + 1], c = demoBoard[i0 + 2];
+            demoBoard[i0] = c;
+            demoBoard[i0 + 1] = a;
+            demoBoard[i0 + 2] = b;
+          } else {
+            var a = demoBoard[index], b = demoBoard[index + 3], c = demoBoard[index + 6];
+            demoBoard[index] = c;
+            demoBoard[index + 3] = a;
+            demoBoard[index + 6] = b;
+          }
+          demoDriftRender();
+        }
+
+        demoEls.forEach(function (tile) {
+          tile.addEventListener("click", function () {
+            var idx = parseInt(tile.getAttribute("data-idx"), 10);
+            var row = Math.floor(idx / 3);
+            var col = idx % 3;
+            demoSlide(true, row);
+            setTimeout(function () {
+              demoSlide(false, col);
+            }, 120);
+          });
+        });
+        demoDriftRender();
+
+        // ——— Drift Tiles (full game): slide row or column ———
+        const driftBoard = [0, 1, 2, 1, 0, 2, 2, 0, 1]; // shape indices
+        const driftEls = document.querySelectorAll("#game-drift .tile");
+
+        function driftRender() {
+          driftBoard.forEach(function (s, i) {
+            const el = driftEls[i];
+            if (!el) return;
+            el.className = "tile shape-" + SHAPES[s];
+            el.innerHTML = driftSvg(s);
+          });
+        }
+
+        function driftSvg(s) {
+          if (s === 0) return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg>';
+          if (s === 1) return '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>';
+          return '<svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg>';
+        }
+
+        function driftSlide(isRow, index) {
+          if (isRow) {
+            const i0 = index * 3;
+            const a = driftBoard[i0],
+              b = driftBoard[i0 + 1],
+              c = driftBoard[i0 + 2];
+            driftBoard[i0] = c;
+            driftBoard[i0 + 1] = a;
+            driftBoard[i0 + 2] = b;
+          } else {
+            const a = driftBoard[index],
+              b = driftBoard[index + 3],
+              c = driftBoard[index + 6];
+            driftBoard[index] = c;
+            driftBoard[index + 3] = a;
+            driftBoard[index + 6] = b;
+          }
+          driftRender();
+        }
+
+        driftEls.forEach(function (tile) {
+          tile.addEventListener("click", function () {
+            const idx = parseInt(tile.getAttribute("data-idx"), 10);
+            const row = Math.floor(idx / 3);
+            const col = idx % 3;
+            driftSlide(true, row);
+            setTimeout(function () {
+              driftSlide(false, col);
+            }, 120);
+          });
+        });
+        driftRender();
+
+        // ——— Soft Loops: draw loop on canvas ———
+        let loopCtx, loopDots, loopPath, loopClosed;
+
+        function initLoops() {
+          const canvas = document.getElementById("loops-canvas");
+          if (!canvas) return;
+          loopCtx = canvas.getContext("2d");
+          const r = 120;
+          const n = 8;
+          loopDots = [];
+          for (let i = 0; i < n; i++) {
+            const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+            loopDots.push({
+              x: 140 + r * Math.cos(a),
+              y: 140 + r * Math.sin(a),
+            });
+          }
+          loopPath = [];
+          loopClosed = false;
+          drawLoops();
+          canvas.onmousedown = loopStart;
+          canvas.ontouchstart = function (e) {
+            e.preventDefault();
+            const t = e.touches[0];
+            loopStart({ clientX: t.clientX, clientY: t.clientY });
+          };
+        }
+
+        function loopStart(e) {
+          const canvas = document.getElementById("loops-canvas");
+          const rect = canvas.getBoundingClientRect();
+          const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+          const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+          loopPath = [{ x, y }];
+          loopClosed = false;
+          canvas.onmousemove = loopMove;
+          canvas.onmouseup = canvas.onmouseleave = loopEnd;
+          canvas.ontouchmove = function (ev) {
+            ev.preventDefault();
+            const t = ev.touches[0];
+            loopMove({ clientX: t.clientX, clientY: t.clientY });
+          };
+          canvas.ontouchend = loopEnd;
+        }
+
+        function loopMove(e) {
+          const canvas = document.getElementById("loops-canvas");
+          const rect = canvas.getBoundingClientRect();
+          const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+          const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+          loopPath.push({ x, y });
+          drawLoops();
+        }
+
+        function loopEnd() {
+          const canvas = document.getElementById("loops-canvas");
+          canvas.onmousemove = null;
+          canvas.onmouseup = null;
+          canvas.onmouseleave = null;
+          canvas.ontouchmove = null;
+          canvas.ontouchend = null;
+          if (loopPath.length > 10) {
+            const first = loopPath[0];
+            const last = loopPath[loopPath.length - 1];
+            const d = Math.hypot(last.x - first.x, last.y - first.y);
+            if (d < 40) loopClosed = true;
+          }
+          drawLoops();
+          setTimeout(function () {
+            loopPath = [];
+            loopClosed = false;
+            drawLoops();
+          }, 1200);
+        }
+
+        function drawLoops() {
+          const canvas = document.getElementById("loops-canvas");
+          if (!canvas || !loopCtx || !loopDots) return;
+          const dpr = window.devicePixelRatio || 1;
+          loopCtx.clearRect(0, 0, canvas.width, canvas.height);
+          loopCtx.strokeStyle = "rgba(154, 143, 181, 0.35)";
+          loopCtx.lineWidth = 2;
+          loopCtx.beginPath();
+          loopCtx.arc(140, 140, 120, 0, Math.PI * 2);
+          loopCtx.stroke();
+          loopDots.forEach(function (d) {
+            loopCtx.beginPath();
+            loopCtx.arc(d.x, d.y, 6, 0, Math.PI * 2);
+            loopCtx.fillStyle = "rgba(232, 230, 227, 0.9)";
+            loopCtx.fill();
+            loopCtx.strokeStyle = "rgba(168, 166, 161, 0.4)";
+            loopCtx.stroke();
+          });
+          if (loopPath.length > 1) {
+            loopCtx.beginPath();
+            loopCtx.moveTo(loopPath[0].x, loopPath[0].y);
+            loopPath.forEach(function (p) {
+              loopCtx.lineTo(p.x, p.y);
+            });
+            loopCtx.strokeStyle = loopClosed ? "rgba(154, 143, 181, 0.8)" : "rgba(154, 143, 181, 0.5)";
+            loopCtx.lineWidth = loopClosed ? 4 : 2.5;
+            loopCtx.lineCap = "round";
+            loopCtx.lineJoin = "round";
+            loopCtx.stroke();
+          }
+        }
+
+        // ——— Gentle Merge ———
+        const MERGE_SHAPES = ["a", "b", "c"];
+        const mergeSvg = {
+          a: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" /></svg>',
+          b: '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>',
+          c: '<svg viewBox="0 0 24 24"><path d="M12 5l7 14H5z" /></svg>',
+        };
+        let mergeBoard = [];
+
+        function mergeFill() {
+          const count = 4 * 4;
+          mergeBoard = [];
+          for (let i = 0; i < count; i++) {
+            mergeBoard.push(MERGE_SHAPES[i % 3]);
+          }
+          mergeRender();
+        }
+
+        function mergeRender() {
+          const container = document.getElementById("merge-board");
+          if (!container) return;
+          container.innerHTML = "";
+          mergeBoard.forEach(function (shape, i) {
+            const cell = document.createElement("div");
+            cell.className = shape ? "cell shape-" + shape : "cell empty";
+            cell.setAttribute("data-idx", i);
+            if (shape) {
+              cell.innerHTML = mergeSvg[shape];
+              cell.addEventListener("click", function () {
+                mergeClick(i);
+              });
+            }
+            container.appendChild(cell);
+          });
+        }
+
+        let mergeSelected = null;
+
+        function mergeClick(i) {
+          if (!mergeBoard[i]) return;
+          if (mergeSelected === null) {
+            mergeSelected = i;
+            document.querySelectorAll("#merge-board .cell").forEach(function (c) {
+              c.style.boxShadow = "";
+            });
+            const el = document.querySelector('#merge-board .cell[data-idx="' + i + '"]');
+            if (el) el.style.boxShadow = "0 0 0 3px rgba(154, 143, 181, 0.6)";
+            return;
+          }
+          if (mergeSelected === i) {
+            mergeSelected = null;
+            mergeRender();
+            return;
+          }
+          const r1 = Math.floor(mergeSelected / 4),
+            c1 = mergeSelected % 4;
+          const r2 = Math.floor(i / 4),
+            c2 = i % 4;
+          const adj = (Math.abs(r1 - r2) === 1 && c1 === c2) || (Math.abs(c1 - c2) === 1 && r1 === r2);
+          if (adj && mergeBoard[mergeSelected] === mergeBoard[i]) {
+            mergeBoard[mergeSelected] = null;
+            mergeBoard[i] = null;
+          }
+          mergeSelected = null;
+          mergeRender();
+        }
+
+        function initMerge() {
+          if (document.getElementById("merge-board").children.length === 0) mergeFill();
+        }
+      })();
+    </script>
   </body>
 </html>
-
