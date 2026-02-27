@@ -181,14 +181,21 @@
         margin-top: 2px;
       }
 
-      .nav-pill {
-        padding: 8px 14px;
+      .nav-waitlist {
+        padding: 8px 16px;
         border-radius: var(--radius-pill);
-        font-size: 0.75rem;
-        color: var(--text-soft);
+        font-size: 0.8rem;
+        color: var(--text-primary);
         border: 1px solid var(--border-soft);
         background: var(--bg-card);
-        backdrop-filter: blur(12px);
+        backdrop-filter: blur(14px);
+        text-decoration: none;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .nav-waitlist:hover {
+        border-color: var(--text-soft);
       }
 
       /* Hero — vector style */
@@ -198,12 +205,19 @@
       }
 
       .hero h1 {
-        font-size: clamp(1.8rem, 4vw, 2.4rem);
-        font-weight: 400;
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        font-weight: 500;
         letter-spacing: -0.02em;
         line-height: 1.25;
         margin: 0 0 12px;
         color: var(--text-primary);
+      }
+
+      .hero-subtitle {
+        font-size: 0.95rem;
+        color: var(--text-soft);
+        margin: 0 auto 10px;
+        max-width: 420px;
       }
 
       .hero p {
@@ -539,7 +553,7 @@
         color: var(--text-softer);
       }
 
-      /* ——— Gentle Merge ——— */
+      /* ——— Gentle Merge (color match) ——— */
       #game-merge .merge-board {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -548,6 +562,34 @@
         border-radius: 24px;
         background: rgba(35, 42, 59, 0.6);
         border: 1px solid var(--border-soft);
+      }
+
+      #game-merge .merge-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 14px;
+        margin-bottom: 10px;
+      }
+
+      #game-merge .merge-btn {
+        padding: 7px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border-soft);
+        background: var(--bg-card);
+        color: var(--text-soft);
+        font-size: 0.8rem;
+        font-family: var(--font);
+        cursor: pointer;
+      }
+
+      #game-merge .merge-btn:hover {
+        border-color: var(--text-soft);
+      }
+
+      #game-merge .merge-btn--primary {
+        color: var(--text-primary);
       }
 
       #game-merge .cell {
@@ -560,6 +602,7 @@
         cursor: pointer;
         transition: transform 0.15s, box-shadow 0.15s;
         border: 1px solid var(--border-soft);
+        background: rgba(37, 42, 66, 0.8);
       }
 
       #game-merge .cell:hover:not(.empty) {
@@ -572,27 +615,12 @@
         cursor: default;
       }
 
-      #game-merge .cell.shape-a {
-        background: linear-gradient(145deg, var(--accent-lavender), transparent);
+      #game-merge .cell.selected {
+        box-shadow: 0 0 0 3px rgba(176, 172, 192, 0.7);
       }
 
-      #game-merge .cell.shape-b {
-        background: linear-gradient(145deg, var(--accent-sage), transparent);
-      }
-
-      #game-merge .cell.shape-c {
-        background: linear-gradient(145deg, var(--accent-dust), transparent);
-      }
-
-      #game-merge .cell svg {
-        width: 28px;
-        height: 28px;
-        stroke: var(--text-primary);
-        fill: none;
-        stroke-width: 1.6;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        opacity: 0.95;
+      #game-merge.paused .merge-board {
+        opacity: 0.6;
       }
 
       #game-merge .hint {
@@ -746,15 +774,16 @@
             </svg>
           </div>
           <div class="brand-text">
-            <div class="name">Calm Puzzlefi</div>
+            <div class="name">Puzzlefi</div>
             <div class="tagline">Wind down · drift off</div>
           </div>
         </div>
-        <div class="nav-pill">No timers · no scores · just calm</div>
+        <a class="nav-waitlist" href="#waitlist">Join the waitlist</a>
       </header>
 
       <section class="hero">
-        <h1>Three gentle puzzles for a quieter mind</h1>
+        <h1>No timers · No Score · Just calm</h1>
+        <p class="hero-subtitle">Three gentle puzzles for a quieter mind</p>
         <p>Designed for decompressing after the day and easing into sleep. No rush, no fail — just soft shapes and slow decisions.</p>
         <p class="hint">Pick one and take your time.</p>
       </section>
@@ -807,6 +836,17 @@
       <footer>
         Low-contrast, screen-soft · best in dim light before bed
       </footer>
+      <section id="waitlist" style="margin-top: 32px;">
+        <iframe
+          class="airtable-embed"
+          src="https://airtable.com/embed/appDqyxz8DVhC1za7/pagEDcmlsgxt9y54P/form"
+          frameborder="0"
+          onmousewheel=""
+          width="100%"
+          height="533"
+          style="background: transparent; border: 1px solid #ccc; border-radius: 20px; overflow: hidden;"
+        ></iframe>
+      </section>
     </div>
 
     <!-- Game 1: Drift Tiles -->
@@ -837,12 +877,17 @@
       <p class="hint">Drag to connect the dots in a gentle loop. Release to close the circle and watch it glow.</p>
     </div>
 
-    <!-- Game 3: Gentle Merge -->
-    <div id="game-merge" class="game-view" aria-label="Gentle Merge game">
+    <!-- Game 3: Gentle Merge (color match) -->
+    <div id="game-merge" class="game-view" aria-label="Gentle Merge color matching game">
       <button type="button" class="back-btn" data-back>← Back</button>
       <span class="game-title">Gentle Merge</span>
+      <div class="merge-controls">
+        <button type="button" class="merge-btn merge-btn--primary" id="merge-start">Start</button>
+        <button type="button" class="merge-btn" id="merge-stop">Stop</button>
+        <button type="button" class="merge-btn" id="merge-reset">Start over</button>
+      </div>
       <div class="merge-board" id="merge-board"></div>
-      <p class="hint">Tap two adjacent matching shapes to merge them. Simplify the board at your own pace.</p>
+      <p class="hint">Tap tiles to reveal colors and find gentle matches. Use Start, Stop, or Start over whenever you like.</p>
     </div>
 
     <script>
@@ -1105,20 +1150,32 @@
         }
 
         // ——— Gentle Merge ———
-        const MERGE_SHAPES = ["a", "b", "c"];
-        const mergeSvg = {
-          a: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" /></svg>',
-          b: '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>',
-          c: '<svg viewBox="0 0 24 24"><path d="M12 5l7 14H5z" /></svg>',
-        };
+        const MERGE_COLORS = ["#9a8fb5", "#6b72a8", "#7b92c8", "#b0b5dc"];
         let mergeBoard = [];
+        let mergeSelected = null;
+        let mergeRunning = false;
+        let mergeLocked = false;
 
-        function mergeFill() {
-          const count = 4 * 4;
-          mergeBoard = [];
-          for (let i = 0; i < count; i++) {
-            mergeBoard.push(MERGE_SHAPES[i % 3]);
+        function mergeNewBoard() {
+          const pairsPerColor = 4; // 4 colors * 4 = 16 cells
+          const pool = [];
+          MERGE_COLORS.forEach(function (c) {
+            for (let i = 0; i < pairsPerColor; i++) {
+              pool.push(c);
+            }
+          });
+          // shuffle
+          for (let i = pool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = pool[i];
+            pool[i] = pool[j];
+            pool[j] = tmp;
           }
+          mergeBoard = pool;
+          mergeSelected = null;
+          mergeLocked = false;
+          mergeRunning = true;
+          mergeUpdatePausedState();
           mergeRender();
         }
 
@@ -1126,12 +1183,16 @@
           const container = document.getElementById("merge-board");
           if (!container) return;
           container.innerHTML = "";
-          mergeBoard.forEach(function (shape, i) {
+          mergeBoard.forEach(function (color, i) {
             const cell = document.createElement("div");
-            cell.className = shape ? "cell shape-" + shape : "cell empty";
+            const isEmpty = !color;
+            let cls = "cell";
+            if (isEmpty) cls += " empty";
+            if (mergeSelected === i && !isEmpty) cls += " selected";
+            cell.className = cls;
             cell.setAttribute("data-idx", i);
-            if (shape) {
-              cell.innerHTML = mergeSvg[shape];
+            if (!isEmpty) {
+              cell.style.background = color;
               cell.addEventListener("click", function () {
                 mergeClick(i);
               });
@@ -1140,17 +1201,19 @@
           });
         }
 
-        let mergeSelected = null;
+        function mergeUpdatePausedState() {
+          const view = document.getElementById("game-merge");
+          if (!view) return;
+          view.classList.toggle("paused", !mergeRunning);
+        }
 
         function mergeClick(i) {
-          if (!mergeBoard[i]) return;
+          if (!mergeRunning || mergeLocked) return;
+          const color = mergeBoard[i];
+          if (!color) return;
           if (mergeSelected === null) {
             mergeSelected = i;
-            document.querySelectorAll("#merge-board .cell").forEach(function (c) {
-              c.style.boxShadow = "";
-            });
-            const el = document.querySelector('#merge-board .cell[data-idx="' + i + '"]');
-            if (el) el.style.boxShadow = "0 0 0 3px rgba(154, 143, 181, 0.6)";
+            mergeRender();
             return;
           }
           if (mergeSelected === i) {
@@ -1158,21 +1221,51 @@
             mergeRender();
             return;
           }
-          const r1 = Math.floor(mergeSelected / 4),
-            c1 = mergeSelected % 4;
-          const r2 = Math.floor(i / 4),
-            c2 = i % 4;
-          const adj = (Math.abs(r1 - r2) === 1 && c1 === c2) || (Math.abs(c1 - c2) === 1 && r1 === r2);
-          if (adj && mergeBoard[mergeSelected] === mergeBoard[i]) {
+          const firstColor = mergeBoard[mergeSelected];
+          if (firstColor === color) {
             mergeBoard[mergeSelected] = null;
             mergeBoard[i] = null;
+            mergeSelected = null;
+            mergeRender();
+          } else {
+            mergeLocked = true;
+            const prevIndex = mergeSelected;
+            mergeSelected = i;
+            mergeRender();
+            setTimeout(function () {
+              mergeLocked = false;
+              mergeSelected = null;
+              mergeRender();
+            }, 700);
           }
-          mergeSelected = null;
-          mergeRender();
         }
 
         function initMerge() {
-          if (document.getElementById("merge-board").children.length === 0) mergeFill();
+          const startBtn = document.getElementById("merge-start");
+          const stopBtn = document.getElementById("merge-stop");
+          const resetBtn = document.getElementById("merge-reset");
+          if (!startBtn || startBtn._wired) return;
+          startBtn._wired = true;
+
+          startBtn.addEventListener("click", function () {
+            mergeNewBoard();
+          });
+
+          stopBtn.addEventListener("click", function () {
+            mergeRunning = false;
+            mergeUpdatePausedState();
+          });
+
+          resetBtn.addEventListener("click", function () {
+            mergeNewBoard();
+          });
+
+          if (!mergeBoard.length) {
+            mergeNewBoard();
+          } else {
+            mergeRender();
+            mergeUpdatePausedState();
+          }
         }
       })();
     </script>
