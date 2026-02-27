@@ -778,7 +778,7 @@
             <div class="tagline">Wind down · drift off</div>
           </div>
         </div>
-        <a class="nav-waitlist" href="#waitlist">Join the waitlist</a>
+        <a class="nav-waitlist" href="#waitlist" id="nav-waitlist-link">Join the waitlist</a>
       </header>
 
       <section class="hero">
@@ -836,7 +836,7 @@
       <footer>
         Low-contrast, screen-soft · best in dim light before bed
       </footer>
-      <section id="waitlist" style="margin-top: 32px;">
+      <section id="waitlist" style="margin-top: 32px; display: none;">
         <iframe
           class="airtable-embed"
           src="https://airtable.com/embed/appDqyxz8DVhC1za7/pagEDcmlsgxt9y54P/form"
@@ -937,6 +937,19 @@
         if (demoPlayFull) {
           demoPlayFull.addEventListener("click", function () {
             showView("drift");
+          });
+        }
+
+        var waitlistLink = document.getElementById("nav-waitlist-link");
+        if (waitlistLink) {
+          waitlistLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            var section = document.getElementById("waitlist");
+            if (!section) return;
+            if (section.style.display === "none" || !section.style.display) {
+              section.style.display = "block";
+            }
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
           });
         }
 
