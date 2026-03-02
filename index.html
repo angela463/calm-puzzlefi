@@ -963,7 +963,7 @@
       </div>
     </div>
 
-    <audio id="bg-audio" loop src="assets/gentle-puzzle-flow.mp3"></audio>
+    <audio id="bg-audio" loop src="./assets/gentle-puzzle-flow.mp3"></audio>
 
     <!-- Game 1: Drift Tiles -->
     <div id="game-drift" class="game-view" aria-label="Drift Tiles game">
@@ -1087,6 +1087,7 @@
         var bgAudio = document.getElementById("bg-audio");
         var audioToggle = document.getElementById("audio-toggle");
         if (bgAudio && audioToggle) {
+          bgAudio.volume = 0.6;
           var audioOn = false;
           audioToggle.addEventListener("click", function () {
             if (!audioOn) {
