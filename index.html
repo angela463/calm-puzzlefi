@@ -327,6 +327,10 @@
         color: var(--text-softer);
       }
 
+      .hero .soft-phrase {
+        white-space: nowrap;
+      }
+
       /* Demo box — playable preview */
       .demo-box {
         margin-bottom: 48px;
@@ -893,7 +897,7 @@
       <section class="hero">
         <h1>No timers · No Score · Just calm</h1>
         <p class="hero-subtitle">Three gentle puzzles for a quieter mind</p>
-        <p>Designed for decompressing after the day and easing into sleep. No rush, no fail — just soft shapes and slow decisions.</p>
+        <p>Designed for decompressing after the day and easing into sleep. No rush, no fail — <span class="soft-phrase">just soft shapes and slow decisions.</span></p>
         <p class="hint">Pick one and take your time.</p>
       </section>
 
@@ -963,7 +967,9 @@
       </div>
     </div>
 
-    <audio id="bg-audio" loop src="./assets/gentle-puzzle-flow.mp3"></audio>
+    <audio id="ambient" loop>
+      <source src="./audio/gentle-puzzle-flow.mp3" type="audio/mpeg" />
+    </audio>
 
     <!-- Game 1: Drift Tiles -->
     <div id="game-drift" class="game-view" aria-label="Drift Tiles game">
@@ -1084,7 +1090,7 @@
           });
         }
 
-        var bgAudio = document.getElementById("bg-audio");
+        var bgAudio = document.getElementById("ambient");
         var audioToggle = document.getElementById("audio-toggle");
         if (bgAudio && audioToggle) {
           bgAudio.volume = 0.6;
