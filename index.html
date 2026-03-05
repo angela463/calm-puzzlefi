@@ -1112,7 +1112,10 @@
         <div class="tile shape-circle" data-idx="7"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" /></svg></div>
         <div class="tile shape-square" data-idx="8"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" /></svg></div>
       </div>
-      <p class="hint">Tap a row or column to drift tiles. Align three of the same shape in a row to soften the board.</p>
+      <p class="hint">
+        Tap any tile to gently rotate its row to the right.
+        Notice how circles, squares, and triangles slide around — see how many calm little rows or columns of the same shape you can drift into place.
+      </p>
     </div>
 
     <!-- Game 2: Soft Loops -->
@@ -1412,23 +1415,14 @@
           return '<svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg>';
         }
 
-        function driftSlide(isRow, index) {
-          if (isRow) {
-            const i0 = index * 3;
-            const a = driftBoard[i0],
-              b = driftBoard[i0 + 1],
-              c = driftBoard[i0 + 2];
-            driftBoard[i0] = c;
-            driftBoard[i0 + 1] = a;
-            driftBoard[i0 + 2] = b;
-          } else {
-            const a = driftBoard[index],
-              b = driftBoard[index + 3],
-              c = driftBoard[index + 6];
-            driftBoard[index] = c;
-            driftBoard[index + 3] = a;
-            driftBoard[index + 6] = b;
-          }
+        function driftSlideRow(row) {
+          const i0 = row * 3;
+          const a = driftBoard[i0],
+            b = driftBoard[i0 + 1],
+            c = driftBoard[i0 + 2];
+          driftBoard[i0] = c;
+          driftBoard[i0 + 1] = a;
+          driftBoard[i0 + 2] = b;
           driftRender();
         }
 
@@ -1436,11 +1430,7 @@
           tile.addEventListener("click", function () {
             const idx = parseInt(tile.getAttribute("data-idx"), 10);
             const row = Math.floor(idx / 3);
-            const col = idx % 3;
-            driftSlide(true, row);
-            setTimeout(function () {
-              driftSlide(false, col);
-            }, 120);
+            driftSlideRow(row);
           });
         });
         driftRender();
