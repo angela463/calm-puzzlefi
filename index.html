@@ -484,6 +484,46 @@
         text-shadow: 0 0 10px rgba(200, 192, 220, 0.9);
       }
 
+      .demo-box .wordsearch-actions {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .demo-box .wordsearch-reset {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border-soft);
+        background: rgba(37, 42, 66, 0.95);
+        color: var(--text-soft);
+        font-size: 0.8rem;
+        font-family: var(--font);
+        cursor: pointer;
+      }
+
+      .demo-box .wordsearch-reset:hover {
+        border-color: var(--accent-lavender);
+        color: var(--text-primary);
+      }
+
+      .demo-box .wordsearch-reset .icon {
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(176, 172, 192, 0.7);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .demo-box .wordsearch-reset svg {
+        width: 11px;
+        height: 11px;
+      }
+
       .demo-box .cta {
         font-size: 0.8rem;
         color: var(--accent-lavender);
@@ -990,6 +1030,18 @@
             </ul>
           </div>
         </div>
+        <div class="wordsearch-actions">
+          <button type="button" class="wordsearch-reset" id="demo-wordsearch-reset">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                <circle cx="10" cy="10" r="6" />
+                <path d="M10 6v3h3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M7.5 12.5a3 3 0 0 0 5-1.5" stroke-linecap="round" />
+              </svg>
+            </span>
+            <span>Start over</span>
+          </button>
+        </div>
         <p class="cta"><button type="button" id="demo-play-full">More puzzles below →</button></p>
       </section>
 
@@ -1204,38 +1256,43 @@
           };
           var grid = [];
           var i, j, r, c, key, cell;
-          for (i = 0; i < size; i++) {
-            grid[i] = [];
-            for (j = 0; j < size; j++) grid[i][j] = "";
-          }
-          for (key in placements) {
-            for (i = 0; i < placements[key].length; i++) {
-              r = placements[key][i][0];
-              c = placements[key][i][1];
-              grid[r][c] = key[i];
+          var container = document.getElementById("demo-wordsearch-grid");
+          if (!container) return;
+
+          function resetGrid() {
+            grid = [];
+            for (i = 0; i < size; i++) {
+              grid[i] = [];
+              for (j = 0; j < size; j++) grid[i][j] = "";
             }
-          }
-          var filler = "ABDEGHIJLNOPQRSTUVWXYZ";
-          for (i = 0; i < size; i++) {
-            for (j = 0; j < size; j++) {
-              if (grid[i][j] === "") grid[i][j] = filler[Math.floor(Math.random() * filler.length)];
+            for (key in placements) {
+              for (i = 0; i < placements[key].length; i++) {
+                r = placements[key][i][0];
+                c = placements[key][i][1];
+                grid[r][c] = key[i];
+              }
+            }
+            var filler = "ABDEGHIJLNOPQRSTUVWXYZ";
+            for (i = 0; i < size; i++) {
+              for (j = 0; j < size; j++) {
+                if (grid[i][j] === "") grid[i][j] = filler[Math.floor(Math.random() * filler.length)];
+              }
+            }
+            container.innerHTML = "";
+            for (i = 0; i < size; i++) {
+              for (j = 0; j < size; j++) {
+                cell = document.createElement("div");
+                cell.className = "wordsearch-cell";
+                cell.setAttribute("data-row", i);
+                cell.setAttribute("data-col", j);
+                cell.setAttribute("role", "gridcell");
+                cell.textContent = grid[i][j];
+                container.appendChild(cell);
+              }
             }
           }
 
-          var container = document.getElementById("demo-wordsearch-grid");
-          if (!container) return;
-          container.innerHTML = "";
-          for (i = 0; i < size; i++) {
-            for (j = 0; j < size; j++) {
-              cell = document.createElement("div");
-              cell.className = "wordsearch-cell";
-              cell.setAttribute("data-row", i);
-              cell.setAttribute("data-col", j);
-              cell.setAttribute("role", "gridcell");
-              cell.textContent = grid[i][j];
-              container.appendChild(cell);
-            }
-          }
+          resetGrid();
 
           var startCell = null;
           var selectedCells = [];
@@ -1325,6 +1382,15 @@
             if (isSelecting) return;
             clearSelection();
           });
+
+          var resetBtn = document.getElementById("demo-wordsearch-reset");
+          if (resetBtn) {
+            resetBtn.addEventListener("click", function () {
+              var items = document.querySelectorAll("#demo-wordlist .wordlist-item.found");
+              items.forEach(function (el) { el.classList.remove("found"); });
+              resetGrid();
+            });
+          }
         })();
 
         // ——— Drift Tiles (full game): slide row or column ———
