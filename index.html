@@ -728,6 +728,46 @@
         opacity: 0.9;
       }
 
+      #game-drift .memory-actions {
+        margin-top: 14px;
+        display: flex;
+        justify-content: center;
+      }
+
+      #game-drift .memory-reset {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border-soft);
+        background: rgba(37, 42, 66, 0.95);
+        color: var(--text-soft);
+        font-size: 0.8rem;
+        font-family: var(--font);
+        cursor: pointer;
+      }
+
+      #game-drift .memory-reset:hover {
+        border-color: var(--accent-lavender);
+        color: var(--text-primary);
+      }
+
+      #game-drift .memory-reset .icon {
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(176, 172, 192, 0.7);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #game-drift .memory-reset svg {
+        width: 11px;
+        height: 11px;
+      }
+
       #game-drift .hint {
         margin-top: 20px;
         font-size: 0.85rem;
@@ -1115,6 +1155,18 @@
         <div class="tile" data-idx="10"></div>
         <div class="tile" data-idx="11"></div>
       </div>
+      <div class="memory-actions">
+        <button type="button" class="memory-reset" id="memory-reset">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="10" cy="10" r="6" />
+              <path d="M10 6v3h3" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M7.5 12.5a3 3 0 0 0 5-1.5" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span>Start over</span>
+        </button>
+      </div>
       <p class="hint">
         Tap a tile to flip it and reveal a gentle night shape.
         Flip two at a time — if they match, they stay softly glowing. Keep going until you’ve found all six pairs, or stop whenever your mind feels a little softer.
@@ -1406,13 +1458,26 @@
         let memoryFlipped = [];
         let memoryLocked = false;
 
-        (function initMemory() {
+        function renderMemory() {
+          memoryEls.forEach(function (el, idx) {
+            const state = memoryState[idx];
+            if (!state) return;
+            if (state.matched || el.classList.contains("flipped")) {
+              el.textContent = memoryIcons[state.icon];
+            } else {
+              el.textContent = "";
+            }
+          });
+        }
+
+        function resetMemory() {
           if (!memoryEls.length) return;
+          memoryFlipped = [];
+          memoryLocked = false;
           const indices = [];
           for (let i = 0; i < memoryIcons.length; i++) {
             indices.push(i, i);
           }
-          // shuffle
           for (let i = indices.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             const tmp = indices[i];
@@ -1425,18 +1490,16 @@
             el.textContent = "";
             el.classList.remove("matched", "flipped");
           });
+          renderMemory();
+        }
+
+        (function initMemory() {
+          resetMemory();
         })();
 
-        function renderMemory() {
-          memoryEls.forEach(function (el, idx) {
-            const state = memoryState[idx];
-            if (!state) return;
-            if (state.matched || el.classList.contains("flipped")) {
-              el.textContent = memoryIcons[state.icon];
-            } else {
-              el.textContent = "";
-            }
-          });
+        const memoryResetBtn = document.getElementById("memory-reset");
+        if (memoryResetBtn) {
+          memoryResetBtn.addEventListener("click", resetMemory);
         }
 
         memoryEls.forEach(function (el, idx) {
