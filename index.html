@@ -704,6 +704,10 @@
         border: 1px solid var(--border-soft);
       }
 
+      #game-drift .tile.drift-active {
+        box-shadow: 0 0 0 2px rgba(148, 163, 255, 0.7);
+      }
+
       #game-drift .tile:hover {
         transform: scale(1.03);
       }
@@ -1415,24 +1419,69 @@
           return '<svg viewBox="0 0 24 24"><path d="M12 6l8 12H4z" /></svg>';
         }
 
-        function driftSlideRow(row) {
+        function driftSlideRow(row, dir) {
           const i0 = row * 3;
           const a = driftBoard[i0],
             b = driftBoard[i0 + 1],
             c = driftBoard[i0 + 2];
-          driftBoard[i0] = c;
-          driftBoard[i0 + 1] = a;
-          driftBoard[i0 + 2] = b;
+          if (dir > 0) {
+            // right
+            driftBoard[i0] = c;
+            driftBoard[i0 + 1] = a;
+            driftBoard[i0 + 2] = b;
+          } else {
+            // left
+            driftBoard[i0] = b;
+            driftBoard[i0 + 1] = c;
+            driftBoard[i0 + 2] = a;
+          }
           driftRender();
         }
 
-        driftEls.forEach(function (tile) {
-          tile.addEventListener("click", function () {
+        let driftDragging = false;
+        let driftStartRow = null;
+        let driftStartX = 0;
+
+        function setDriftRowActive(row, active) {
+          driftEls.forEach(function (tile, idx) {
+            if (Math.floor(idx / 3) === row) {
+              if (active) tile.classList.add("drift-active");
+              else tile.classList.remove("drift-active");
+            }
+          });
+        }
+
+        const driftBoardWrap = document.querySelector("#game-drift .board-wrap");
+        if (driftBoardWrap) {
+          driftBoardWrap.addEventListener("mousedown", function (e) {
+            const tile = e.target.closest(".tile");
+            if (!tile) return;
             const idx = parseInt(tile.getAttribute("data-idx"), 10);
             const row = Math.floor(idx / 3);
-            driftSlideRow(row);
+            driftDragging = true;
+            driftStartRow = row;
+            driftStartX = e.clientX;
+            setDriftRowActive(row, true);
           });
-        });
+
+          driftBoardWrap.addEventListener("mousemove", function (e) {
+            if (!driftDragging) return;
+            // we only need the end position on mouseup, so no-op here for now
+          });
+
+          document.addEventListener("mouseup", function (e) {
+            if (!driftDragging || driftStartRow === null) return;
+            const dx = e.clientX - driftStartX;
+            const threshold = 16;
+            if (Math.abs(dx) > threshold) {
+              const dir = dx > 0 ? 1 : -1;
+              driftSlideRow(driftStartRow, dir);
+            }
+            setDriftRowActive(driftStartRow, false);
+            driftDragging = false;
+            driftStartRow = null;
+          });
+        }
         driftRender();
 
         // ——— Soft Loops: draw loop on canvas ———
