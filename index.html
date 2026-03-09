@@ -853,15 +853,47 @@
         text-align: center;
       }
 
-      /* ——— Color Matching (color match) ——— */
-      #game-merge .merge-board {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        padding: 20px;
+      /* ——— Dream Fragments (adventure jigsaw) ——— */
+      #game-merge .scene-wrap {
+        position: relative;
+        width: 100%;
+        max-width: 520px;
+        min-height: 340px;
         border-radius: 24px;
-        background: rgba(35, 42, 59, 0.6);
-        border: 1px solid var(--border-soft);
+        overflow: hidden;
+      }
+
+      #game-merge .scene-bg {
+        position: absolute;
+        inset: -20%;
+        background-image: radial-gradient(circle at 0% 0%, rgba(154, 143, 181, 0.4), transparent 55%),
+          radial-gradient(circle at 100% 100%, rgba(107, 123, 168, 0.4), transparent 55%),
+          radial-gradient(circle at 15% 100%, rgba(91, 100, 160, 0.35), transparent 50%);
+        background-size: 160% 160%;
+        animation: driftScene 40s linear infinite alternate;
+        filter: blur(3px);
+        opacity: 0.85;
+      }
+
+      @keyframes driftScene {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1.02);
+        }
+        50% {
+          transform: translate3d(-10px, -6px, 0) scale(1.05);
+        }
+        100% {
+          transform: translate3d(10px, 6px, 0) scale(1.03);
+        }
+      }
+
+      #game-merge .scene-foreground {
+        position: relative;
+        z-index: 1;
+        padding: 20px 18px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
       }
 
       #game-merge .merge-controls {
@@ -869,19 +901,19 @@
         align-items: center;
         justify-content: center;
         gap: 10px;
-        margin-top: 14px;
-        margin-bottom: 10px;
+        margin-bottom: 4px;
       }
 
       #game-merge .merge-btn {
         padding: 7px 14px;
         border-radius: 999px;
         border: 1px solid var(--border-soft);
-        background: var(--bg-card);
+        background: rgba(25, 30, 52, 0.9);
         color: var(--text-soft);
         font-size: 0.8rem;
         font-family: var(--font);
         cursor: pointer;
+        backdrop-filter: blur(10px);
       }
 
       #game-merge .merge-btn:hover {
@@ -892,76 +924,124 @@
         color: var(--text-primary);
       }
 
-      #game-merge .cell {
-        width: 58px;
-        height: 58px;
+      #game-merge .puzzle-layout {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 14px;
+        align-items: stretch;
+      }
+
+      @media (max-width: 640px) {
+        #game-merge .puzzle-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      #game-merge .merge-board {
+        border-radius: 20px;
+        padding: 12px;
+        background: rgba(18, 22, 40, 0.8);
+        border: 1px solid var(--border-soft);
+        display: grid;
+        grid-template-columns: repeat(3, minmax(54px, 70px));
+        gap: 6px;
+        justify-content: center;
+      }
+
+      #game-merge .puzzle-slot {
+        width: 100%;
+        aspect-ratio: 1 / 1;
         border-radius: 14px;
+        border: 1px dashed rgba(176, 172, 192, 0.45);
+        background: radial-gradient(circle at 20% 15%, rgba(58, 64, 102, 0.9), rgba(21, 24, 40, 0.9));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #game-merge .puzzle-slot.has-piece {
+        border-style: solid;
+        border-color: rgba(200, 192, 220, 0.8);
+      }
+
+      #game-merge .puzzle-slot.correct {
+        box-shadow: 0 0 0 2px rgba(200, 192, 220, 0.85), 0 0 22px rgba(200, 192, 220, 0.85);
+      }
+
+      #game-merge .puzzle-tray {
+        border-radius: 18px;
+        padding: 10px 10px 6px;
+        background: rgba(21, 26, 44, 0.9);
+        border: 1px solid var(--border-soft);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        min-height: 82px;
+        align-content: flex-start;
+      }
+
+      #game-merge .puzzle-piece {
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        border: 1px solid rgba(176, 172, 192, 0.7);
+        background: radial-gradient(circle at 18% 15%, #4a5088, #252a42);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: transform 0.15s, box-shadow 0.15s;
-        border: 1px solid var(--border-soft);
-        background: rgba(37, 42, 66, 0.8);
+        transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+        position: relative;
+        overflow: hidden;
       }
 
-      #game-merge .cell:hover:not(.empty) {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px var(--glow-soft);
+      #game-merge .puzzle-piece svg {
+        width: 82%;
+        height: 82%;
+        stroke: rgba(235, 233, 244, 0.95);
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
       }
 
-      #game-merge .cell.empty {
-        background: transparent;
-        cursor: default;
+      #game-merge .puzzle-piece:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 0 14px rgba(154, 143, 181, 0.7);
       }
 
-      #game-merge .cell.selected {
-        box-shadow: 0 0 0 3px rgba(176, 172, 192, 0.7);
+      #game-merge .puzzle-piece.selected {
+        box-shadow: 0 0 0 2px rgba(200, 192, 220, 0.95), 0 0 18px rgba(200, 192, 220, 0.9);
+        border-color: rgba(220, 215, 240, 0.95);
       }
 
-      #game-merge.paused .merge-board {
-        opacity: 0.6;
+      #game-merge.paused .merge-board,
+      #game-merge.paused .puzzle-tray {
+        opacity: 0.65;
       }
 
       #game-merge .hint {
-        margin-top: 20px;
+        margin-top: 6px;
         font-size: 0.85rem;
         color: var(--text-softer);
+        text-align: center;
       }
 
       #game-merge .merge-stats {
-        margin-top: 4px;
+        margin-top: 2px;
         font-size: 0.8rem;
         color: var(--text-softer);
         text-align: center;
       }
 
       #game-merge .merge-status {
-        margin-top: 4px;
+        margin-top: 2px;
         font-size: 0.85rem;
         color: var(--accent-lavender);
         text-align: center;
         min-height: 1.4em;
-      }
-
-      #game-merge .cell.matched-glow {
-        box-shadow: 0 0 0 2px rgba(200, 192, 220, 0.9), 0 0 26px 6px rgba(200, 192, 220, 0.95);
-        animation: mergeMatchGlow 0.65s ease-out;
-      }
-
-      @keyframes mergeMatchGlow {
-        0% {
-          transform: scale(1);
-          box-shadow: 0 0 0 0 rgba(200, 192, 220, 0.2);
-        }
-        45% {
-          transform: scale(1.08);
-          box-shadow: 0 0 30px 6px rgba(200, 192, 220, 0.95);
-        }
-        100% {
-          transform: scale(1);
-          box-shadow: 0 0 0 2px rgba(200, 192, 220, 0.8);
-        }
       }
 
       /* Footer */
@@ -1197,9 +1277,9 @@
           <div class="icon-wrap">
             <svg viewBox="0 0 24 24"><path d="M8 12h8M12 8v8" /><circle cx="12" cy="12" r="2.5" /></svg>
           </div>
-          <h2 class="title">Color Matching</h2>
-          <p class="tagline">Combine matching shapes</p>
-          <p class="time">~5 min · pause anytime</p>
+          <h2 class="title">Dream Fragments</h2>
+          <p class="tagline">Assemble drifting pieces of a calm scene</p>
+          <p class="time">~7 min · slow adventure</p>
         </article>
       </div>
 
@@ -1275,19 +1355,27 @@
       </div>
     </div>
 
-    <!-- Game 3: Color Matching (color match) -->
-    <div id="game-merge" class="game-view" aria-label="Color Matching game">
+    <!-- Game 3: Dream Fragments (adventure jigsaw) -->
+    <div id="game-merge" class="game-view" aria-label="Dream Fragments puzzle game">
       <button type="button" class="back-btn" data-back>← Back</button>
-      <span class="game-title">Color Matching</span>
-      <div class="merge-controls">
-        <button type="button" class="merge-btn merge-btn--primary" id="merge-start">Start</button>
-        <button type="button" class="merge-btn" id="merge-stop">Stop</button>
-        <button type="button" class="merge-btn" id="merge-reset">Start over</button>
+      <span class="game-title">Dream Fragments</span>
+      <div class="scene-wrap">
+        <div class="scene-bg" aria-hidden="true"></div>
+        <div class="scene-foreground">
+          <div class="merge-controls">
+            <button type="button" class="merge-btn merge-btn--primary" id="merge-start">New scene</button>
+            <button type="button" class="merge-btn" id="merge-reset">Reshuffle pieces</button>
+            <button type="button" class="merge-btn" id="merge-stop">Pause</button>
+          </div>
+          <div class="puzzle-layout">
+            <div class="merge-board" id="merge-board"></div>
+            <div class="puzzle-tray" id="merge-tray"></div>
+          </div>
+          <p class="merge-stats" id="merge-stats"></p>
+          <p class="merge-status" id="merge-status"></p>
+          <p class="hint">Tap a drifting piece, then tap a glowing slot in the scene to place it. When every fragment rests in its home, the board will softly glow.</p>
+        </div>
       </div>
-      <div class="merge-board" id="merge-board"></div>
-      <p class="merge-stats" id="merge-stats"></p>
-      <p class="merge-status" id="merge-status"></p>
-      <p class="hint">Tap tiles to reveal colors and find gentle matches. Clear the whole board in as few moves as feels good for you.</p>
     </div>
 
     <script>
@@ -1812,25 +1900,66 @@
           loopInit();
         }
 
-        // ——— Gentle Merge ———
-        const MERGE_COLORS = ["#9a8fb5", "#6b72a8", "#7b92c8", "#b0b5dc"];
-        let mergeBoard = [];
-        let mergeSelected = null;
-        let mergeRunning = false;
-        let mergeLocked = false;
-        let mergeMatches = 0;
-        let mergeMoves = 0;
-        let mergeTotalPairs = 0;
-        let mergeBestMoves = null;
+        // ——— Dream Fragments: calm jigsaw adventure ———
+        const PUZZLE_ROWS = 3;
+        const PUZZLE_COLS = 3;
+        const PUZZLE_SIZE = PUZZLE_ROWS * PUZZLE_COLS;
 
-        function mergeUpdateStats(statusText) {
+        // abstract piece definitions (just used to vary the SVG paths)
+        const PUZZLE_SHAPES = [
+          0, 1, 2,
+          3, 4, 5,
+          6, 7, 8,
+        ];
+
+        let puzzleSlots = []; // length 9, holds pieceId or null
+        let puzzleTray = []; // remaining pieceIds
+        let puzzleSelected = null; // pieceId
+        let puzzleRunning = false;
+        let puzzleMoves = 0;
+        let puzzleBest = null;
+
+        function puzzlePieceSvg(id) {
+          const variant = id % 3;
+          if (variant === 0) {
+            return '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+              '<path d="M10 55 Q25 10 50 20 T90 40 Q80 80 50 90 T10 55 Z" />' +
+              "</svg>";
+          }
+          if (variant === 1) {
+            return '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+              '<path d="M12 30 Q35 12 55 18 T88 32 Q78 55 60 65 T20 88 Q8 60 20 40 Z" />' +
+              "</svg>";
+          }
+          return '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+            '<path d="M15 20 Q35 8 55 18 T85 35 Q90 60 70 80 T35 90 Q10 80 15 55 T15 20 Z" />' +
+            "</svg>";
+        }
+
+        function puzzleShuffle(arr) {
+          const out = arr.slice();
+          for (let i = out.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = out[i];
+            out[i] = out[j];
+            out[j] = tmp;
+          }
+          return out;
+        }
+
+        function puzzleUpdateStats(statusText) {
           const statsEl = document.getElementById("merge-stats");
           const statusEl = document.getElementById("merge-status");
           if (statsEl) {
             const base =
-              "Matches: " + mergeMatches + " / " + mergeTotalPairs + " · Moves: " + mergeMoves;
+              "Placed: " +
+              puzzleSlots.filter(function (id) { return id !== null; }).length +
+              " / " +
+              PUZZLE_SIZE +
+              " · Moves: " +
+              puzzleMoves;
             const best =
-              mergeBestMoves !== null ? " · Best: " + mergeBestMoves + " moves" : "";
+              puzzleBest !== null ? " · Best: " + puzzleBest + " moves" : "";
             statsEl.textContent = base + best;
           }
           if (statusEl && typeof statusText === "string") {
@@ -1838,129 +1967,133 @@
           }
         }
 
-        function mergeNewBoard() {
-          const pairsPerColor = 4; // 4 colors * 4 = 16 cells
-          const pool = [];
-          MERGE_COLORS.forEach(function (c) {
-            for (let i = 0; i < pairsPerColor; i++) {
-              pool.push(c);
+        function puzzleRender() {
+          const boardEl = document.getElementById("merge-board");
+          const trayEl = document.getElementById("merge-tray");
+          if (!boardEl || !trayEl) return;
+
+          boardEl.innerHTML = "";
+          for (let i = 0; i < PUZZLE_SIZE; i++) {
+            const slotEl = document.createElement("button");
+            slotEl.type = "button";
+            slotEl.className = "puzzle-slot";
+            slotEl.setAttribute("data-slot", i);
+            const pieceId = puzzleSlots[i];
+            if (pieceId !== null && pieceId !== undefined) {
+              slotEl.classList.add("has-piece");
+              if (pieceId === i) {
+                slotEl.classList.add("correct");
+              }
+              slotEl.innerHTML = puzzlePieceSvg(pieceId);
             }
-          });
-          // shuffle
-          for (let i = pool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            const tmp = pool[i];
-            pool[i] = pool[j];
-            pool[j] = tmp;
+            slotEl.addEventListener("click", function () {
+              puzzleOnSlotClick(i);
+            });
+            boardEl.appendChild(slotEl);
           }
-          mergeBoard = pool;
-          mergeSelected = null;
-          mergeLocked = false;
-          mergeRunning = true;
-          mergeMatches = 0;
-          mergeMoves = 0;
-          mergeTotalPairs = pool.length / 2;
-          mergeUpdatePausedState();
-          mergeRender();
-          mergeUpdateStats("New board ready. See how softly you can clear it.");
+
+          trayEl.innerHTML = "";
+          puzzleTray.forEach(function (pieceId) {
+            const pieceEl = document.createElement("button");
+            pieceEl.type = "button";
+            let cls = "puzzle-piece";
+            if (puzzleSelected === pieceId) cls += " selected";
+            pieceEl.className = cls;
+            pieceEl.setAttribute("data-piece", pieceId);
+            pieceEl.innerHTML = puzzlePieceSvg(pieceId);
+            pieceEl.addEventListener("click", function () {
+              puzzleOnPieceClick(pieceId);
+            });
+            trayEl.appendChild(pieceEl);
+          });
         }
 
-        function mergeRender() {
-          const container = document.getElementById("merge-board");
-          if (!container) return;
-          container.innerHTML = "";
-          mergeBoard.forEach(function (color, i) {
-            const cell = document.createElement("div");
-            const isEmpty = !color;
-            let cls = "cell";
-            if (isEmpty) cls += " empty";
-            if (mergeSelected === i && !isEmpty) cls += " selected";
-            cell.className = cls;
-            cell.setAttribute("data-idx", i);
-            if (!isEmpty) {
-              cell.style.background = color;
-              cell.addEventListener("click", function () {
-                mergeClick(i);
-              });
+        function puzzleOnPieceClick(pieceId) {
+          if (!puzzleRunning) {
+            puzzleRunning = true;
+          }
+          if (puzzleSelected === pieceId) {
+            puzzleSelected = null;
+          } else {
+            puzzleSelected = pieceId;
+          }
+          puzzleRender();
+          puzzleUpdateStats("Tap a slot in the scene where this fragment feels like it belongs.");
+        }
+
+        function puzzleOnSlotClick(slotIndex) {
+          if (!puzzleRunning) return;
+          const current = puzzleSlots[slotIndex];
+          if (!puzzleSelected && current !== null && current !== undefined) {
+            // pick piece back up from the board
+            puzzleSelected = current;
+            puzzleSlots[slotIndex] = null;
+            puzzleTray.push(current);
+            puzzleRender();
+            puzzleUpdateStats("Fragment lifted. Find it a softer resting place.");
+            return;
+          }
+          if (!puzzleSelected) {
+            return;
+          }
+          // place selected piece into this slot
+          const pieceId = puzzleSelected;
+          // remove from tray
+          puzzleTray = puzzleTray.filter(function (id) { return id !== pieceId; });
+          // if there was a piece here, return it to tray
+          if (current !== null && current !== undefined) {
+            puzzleTray.push(current);
+          }
+          puzzleSlots[slotIndex] = pieceId;
+          puzzleSelected = null;
+          puzzleMoves += 1;
+          puzzleRender();
+
+          // check completion
+          const allPlaced = puzzleSlots.every(function (id) { return id !== null && id !== undefined; });
+          const allCorrect = puzzleSlots.every(function (id, idx) { return id === idx; });
+
+          if (allPlaced && allCorrect) {
+            puzzleRunning = false;
+            if (puzzleBest === null || puzzleMoves < puzzleBest) {
+              puzzleBest = puzzleMoves;
+              puzzleUpdateStats(
+                "Scene complete in " +
+                  puzzleMoves +
+                  " moves. This is your softest journey so far."
+              );
+            } else {
+              puzzleUpdateStats(
+                "Scene complete in " + puzzleMoves + " moves. Drift here as long as you like."
+              );
             }
-            container.appendChild(cell);
-          });
+          } else {
+            puzzleUpdateStats("Nice move. Keep letting the scene fall into place.");
+          }
+        }
+
+        function puzzleNewScene() {
+          const allPieces = PUZZLE_SHAPES.slice(0, PUZZLE_SIZE);
+          // keep generated picture consistent but shuffle positions
+          puzzleSlots = new Array(PUZZLE_SIZE).fill(null);
+          puzzleTray = puzzleShuffle(allPieces);
+          puzzleSelected = null;
+          puzzleMoves = 0;
+          puzzleRunning = true;
+          puzzleRender();
+          puzzleUpdateStats("New fragments drifting in. Place them wherever feels right, then refine.");
+        }
+
+        function puzzleReshuffleTray() {
+          puzzleTray = puzzleShuffle(puzzleTray);
+          puzzleRender();
+          puzzleUpdateStats("Tray reshuffled. Sometimes a tiny change refreshes the whole scene.");
         }
 
         function mergeUpdatePausedState() {
           const view = document.getElementById("game-merge");
           if (!view) return;
-          view.classList.toggle("paused", !mergeRunning);
-        }
-
-        function mergeClick(i) {
-          if (!mergeRunning || mergeLocked) return;
-          const color = mergeBoard[i];
-          if (!color) return;
-          if (mergeSelected === null) {
-            mergeSelected = i;
-            mergeRender();
-            return;
-          }
-          if (mergeSelected === i) {
-            mergeSelected = null;
-            mergeRender();
-            return;
-          }
-          mergeMoves += 1;
-          const firstColor = mergeBoard[mergeSelected];
-          if (firstColor === color) {
-            const a = mergeSelected;
-            const b = i;
-            const boardEl = document.getElementById("merge-board");
-            if (boardEl) {
-              const firstEl = boardEl.querySelector('.cell[data-idx="' + a + '"]');
-              const secondEl = boardEl.querySelector('.cell[data-idx="' + b + '"]');
-              [firstEl, secondEl].forEach(function (el) {
-                if (el) el.classList.add("matched-glow");
-              });
-            }
-            mergeLocked = true;
-            setTimeout(function () {
-              mergeBoard[a] = null;
-              mergeBoard[b] = null;
-              mergeSelected = null;
-              mergeLocked = false;
-              mergeMatches += 1;
-              mergeRender();
-              if (mergeMatches === mergeTotalPairs) {
-                mergeRunning = false;
-                if (mergeBestMoves === null || mergeMoves < mergeBestMoves) {
-                  mergeBestMoves = mergeMoves;
-                  mergeUpdateStats(
-                    "Board cleared in " +
-                      mergeMoves +
-                      " moves. That's your softest run so far."
-                  );
-                } else {
-                  mergeUpdateStats(
-                    "Board cleared in " + mergeMoves + " moves. Nicely done."
-                  );
-                }
-                mergeUpdatePausedState();
-              } else {
-                mergeUpdateStats("Nice match. Follow the glow to the next ones.");
-              }
-            }, 380);
-          } else {
-            mergeLocked = true;
-            const prevIndex = mergeSelected;
-            mergeSelected = i;
-            mergeRender();
-            setTimeout(function () {
-              mergeLocked = false;
-              mergeSelected = null;
-              mergeRender();
-            }, 700);
-          }
-          if (mergeRunning) {
-            mergeUpdateStats();
-          }
+          view.classList.toggle("paused", !puzzleRunning);
         }
 
         function initMerge() {
@@ -1971,26 +2104,23 @@
           startBtn._wired = true;
 
           startBtn.addEventListener("click", function () {
-            mergeNewBoard();
-          });
-
-          stopBtn.addEventListener("click", function () {
-            mergeRunning = false;
+            puzzleNewScene();
             mergeUpdatePausedState();
-            mergeUpdateStats("Paused. You can resume or start a fresh board anytime.");
           });
 
           resetBtn.addEventListener("click", function () {
-            mergeNewBoard();
+            puzzleReshuffleTray();
           });
 
-          if (!mergeBoard.length) {
-            mergeNewBoard();
-          } else {
-            mergeRender();
+          stopBtn.addEventListener("click", function () {
+            puzzleRunning = false;
             mergeUpdatePausedState();
-            mergeUpdateStats();
-          }
+            puzzleUpdateStats("Paused. Leave the pieces where they are, or start a new scene when you return.");
+          });
+
+          // initial state
+          puzzleNewScene();
+          mergeUpdatePausedState();
         }
       })();
     </script>
