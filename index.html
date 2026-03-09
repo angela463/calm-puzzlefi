@@ -775,26 +775,82 @@
       }
 
       /* ——— Soft Loops ——— */
-      #game-loops .loop-canvas-wrap {
-        width: 280px;
-        height: 280px;
-        position: relative;
-        border-radius: 50%;
-        background: rgba(35, 42, 59, 0.5);
+      #game-loops .loops-shell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+
+      #game-loops .loop-board {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(56px, 64px));
+        gap: 8px;
+        padding: 16px;
+        border-radius: 24px;
+        background: rgba(35, 42, 59, 0.6);
         border: 1px solid var(--border-soft);
       }
 
-      #game-loops canvas {
+      @media (min-width: 500px) {
+        #game-loops .loop-board {
+          grid-template-columns: repeat(4, 72px);
+          gap: 10px;
+          padding: 20px;
+        }
+      }
+
+      #game-loops .loop-tile {
         width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        cursor: crosshair;
+        aspect-ratio: 1 / 1;
+        border-radius: 18px;
+        background: radial-gradient(circle at 20% 15%, #383f6a, #1b2035);
+        border: 1px solid var(--border-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #game-loops .loop-tile:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 0 16px rgba(154, 143, 181, 0.5);
+      }
+
+      #game-loops .loop-tile svg {
+        width: 80%;
+        height: 80%;
+        stroke: rgba(230, 228, 236, 0.95);
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        transition: stroke 0.2s ease;
+      }
+
+      #game-loops .loop-tile--connected {
+        background: radial-gradient(circle at 20% 15%, #5a5090, #3a4068);
+      }
+
+      #game-loops .loop-tile--connected svg {
+        stroke: rgba(246, 243, 255, 0.98);
+      }
+
+      #game-loops .loop-message {
+        font-size: 0.85rem;
+        color: var(--text-softer);
+        min-height: 1.4em;
+        text-align: center;
       }
 
       #game-loops .hint {
-        margin-top: 20px;
+        margin-top: 4px;
         font-size: 0.85rem;
         color: var(--text-softer);
+        text-align: center;
       }
 
       /* ——— Color Matching (color match) ——— */
@@ -1177,10 +1233,11 @@
     <div id="game-loops" class="game-view" aria-label="Soft Loops game">
       <button type="button" class="back-btn" data-back>← Back</button>
       <span class="game-title">Soft Loops</span>
-      <div class="loop-canvas-wrap">
-        <canvas id="loops-canvas" width="280" height="280"></canvas>
+      <div class="loops-shell">
+        <div class="loop-board" id="loops-board"></div>
+        <p class="loop-message" id="loops-message"></p>
+        <p class="hint">Tap tiles to rotate their soft paths. When every path flows into the next, the whole loop will gently glow.</p>
       </div>
-      <p class="hint">Drag to connect the dots in a gentle loop. Release to close the circle and watch it glow.</p>
     </div>
 
     <!-- Game 3: Color Matching (color match) -->
@@ -1541,111 +1598,181 @@
 
         renderMemory();
 
-        // ——— Soft Loops: draw loop on canvas ———
-        let loopCtx, loopDots, loopPath, loopClosed;
+        // ——— Soft Loops: calm loop-connection puzzle ———
+        const LOOP_ROWS = 4;
+        const LOOP_COLS = 4;
+
+        // base tiles: edges are [top, right, bottom, left]
+        const LOOP_TILES_BASE = [
+          { edges: [1, 1, 0, 0] }, // ┐
+          { edges: [0, 1, 1, 0] }, // ┘
+          { edges: [0, 0, 1, 1] }, // └
+          { edges: [1, 0, 0, 1] }, // ┌
+          { edges: [1, 0, 1, 0] }, // vertical
+          { edges: [0, 1, 0, 1] }, // horizontal
+        ];
+
+        // simple handcrafted puzzle layout: tileIndex + starting rotation
+        const LOOP_LEVEL = [
+          { type: 0, rot: 1 }, { type: 5, rot: 0 }, { type: 5, rot: 0 }, { type: 1, rot: 2 },
+          { type: 4, rot: 0 }, { type: 0, rot: 2 }, { type: 1, rot: 3 }, { type: 4, rot: 0 },
+          { type: 4, rot: 0 }, { type: 2, rot: 1 }, { type: 3, rot: 0 }, { type: 4, rot: 0 },
+          { type: 2, rot: 0 }, { type: 5, rot: 0 }, { type: 5, rot: 0 }, { type: 3, rot: 3 },
+        ];
+
+        let loopBoardState = [];
+
+        function rotateEdges(edges, times) {
+          let e = edges.slice();
+          for (let i = 0; i < times; i++) {
+            e = [e[3], e[0], e[1], e[2]]; // rotate clockwise
+          }
+          return e;
+        }
+
+        function loopTileSvg(edges) {
+          // edges: [top, right, bottom, left]
+          const paths = [];
+          if (edges[0] && edges[2] && !edges[1] && !edges[3]) {
+            paths.push('<line x1="50" y1="0" x2="50" y2="100" />');
+          } else if (!edges[0] && !edges[2] && edges[1] && edges[3]) {
+            paths.push('<line x1="0" y1="50" x2="100" y2="50" />');
+          } else {
+            if (edges[0] && edges[1]) {
+              paths.push('<path d="M50 0 Q100 0 100 50" />');
+            }
+            if (edges[1] && edges[2]) {
+              paths.push('<path d="M100 50 Q100 100 50 100" />');
+            }
+            if (edges[2] && edges[3]) {
+              paths.push('<path d="M50 100 Q0 100 0 50" />');
+            }
+            if (edges[3] && edges[0]) {
+              paths.push('<path d="M0 50 Q0 0 50 0" />');
+            }
+          }
+          return (
+            '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+            paths.join("") +
+            "</svg>"
+          );
+        }
+
+        function loopIndex(r, c) {
+          return r * LOOP_COLS + c;
+        }
+
+        function loopInit() {
+          const container = document.getElementById("loops-board");
+          const message = document.getElementById("loops-message");
+          if (!container || !message) return;
+
+          loopBoardState = LOOP_LEVEL.map(function (tile) {
+            return { type: tile.type, rot: tile.rot % 4 };
+          });
+
+          container.innerHTML = "";
+          for (let r = 0; r < LOOP_ROWS; r++) {
+            for (let c = 0; c < LOOP_COLS; c++) {
+              const idx = loopIndex(r, c);
+              const tileState = loopBoardState[idx];
+              const base = LOOP_TILES_BASE[tileState.type];
+              const edges = rotateEdges(base.edges, tileState.rot);
+              const el = document.createElement("button");
+              el.type = "button";
+              el.className = "loop-tile";
+              el.setAttribute("data-idx", idx);
+              el.innerHTML = loopTileSvg(edges);
+              el.addEventListener("click", function () {
+                loopRotate(idx);
+              });
+              container.appendChild(el);
+            }
+          }
+
+          message.textContent = "Rotate pieces until every path flows smoothly.";
+          loopUpdateConnections();
+        }
+
+        function loopRotate(idx) {
+          const tileState = loopBoardState[idx];
+          if (!tileState) return;
+          tileState.rot = (tileState.rot + 1) % 4;
+          const base = LOOP_TILES_BASE[tileState.type];
+          const edges = rotateEdges(base.edges, tileState.rot);
+          const tileEl = document.querySelector('#loops-board .loop-tile[data-idx="' + idx + '"]');
+          if (tileEl) {
+            tileEl.innerHTML = loopTileSvg(edges);
+          }
+          loopUpdateConnections();
+        }
+
+        function loopUpdateConnections() {
+          const container = document.getElementById("loops-board");
+          const message = document.getElementById("loops-message");
+          if (!container || !message) return;
+
+          let allConnected = true;
+
+          for (let r = 0; r < LOOP_ROWS; r++) {
+            for (let c = 0; c < LOOP_COLS; c++) {
+              const idx = loopIndex(r, c);
+              const tileState = loopBoardState[idx];
+              const base = LOOP_TILES_BASE[tileState.type];
+              const edges = rotateEdges(base.edges, tileState.rot);
+
+              const neighbors = [
+                { nr: r - 1, nc: c, dir: 0, opp: 2 }, // top
+                { nr: r, nc: c + 1, dir: 1, opp: 3 }, // right
+                { nr: r + 1, nc: c, dir: 2, opp: 0 }, // bottom
+                { nr: r, nc: c - 1, dir: 3, opp: 1 }, // left
+              ];
+
+              let tileConnected = true;
+
+              for (let k = 0; k < neighbors.length; k++) {
+                const n = neighbors[k];
+                const hasEdge = edges[n.dir] === 1;
+                const inside =
+                  n.nr >= 0 && n.nr < LOOP_ROWS && n.nc >= 0 && n.nc < LOOP_COLS;
+
+                if (!hasEdge) continue;
+                if (!inside) {
+                  tileConnected = false;
+                  allConnected = false;
+                  break;
+                }
+
+                const nIdx = loopIndex(n.nr, n.nc);
+                const nState = loopBoardState[nIdx];
+                const nBase = LOOP_TILES_BASE[nState.type];
+                const nEdges = rotateEdges(nBase.edges, nState.rot);
+
+                if (nEdges[n.opp] !== 1) {
+                  tileConnected = false;
+                  allConnected = false;
+                  break;
+                }
+              }
+
+              const tileEl = container.querySelector(
+                '.loop-tile[data-idx="' + idx + '"]'
+              );
+              if (tileEl) {
+                tileEl.classList.toggle("loop-tile--connected", tileConnected);
+              }
+            }
+          }
+
+          if (allConnected) {
+            message.textContent = "Everything is flowing in one soft loop. Take a breath here as long as you like.";
+          } else {
+            message.textContent = "Keep rotating pieces until no paths end abruptly.";
+          }
+        }
 
         function initLoops() {
-          const canvas = document.getElementById("loops-canvas");
-          if (!canvas) return;
-          loopCtx = canvas.getContext("2d");
-          const r = 120;
-          const n = 8;
-          loopDots = [];
-          for (let i = 0; i < n; i++) {
-            const a = (i / n) * Math.PI * 2 - Math.PI / 2;
-            loopDots.push({
-              x: 140 + r * Math.cos(a),
-              y: 140 + r * Math.sin(a),
-            });
-          }
-          loopPath = [];
-          loopClosed = false;
-          drawLoops();
-          canvas.onmousedown = loopStart;
-          canvas.ontouchstart = function (e) {
-            e.preventDefault();
-            const t = e.touches[0];
-            loopStart({ clientX: t.clientX, clientY: t.clientY });
-          };
-        }
-
-        function loopStart(e) {
-          const canvas = document.getElementById("loops-canvas");
-          const rect = canvas.getBoundingClientRect();
-          const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-          const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-          loopPath = [{ x, y }];
-          loopClosed = false;
-          canvas.onmousemove = loopMove;
-          canvas.onmouseup = canvas.onmouseleave = loopEnd;
-          canvas.ontouchmove = function (ev) {
-            ev.preventDefault();
-            const t = ev.touches[0];
-            loopMove({ clientX: t.clientX, clientY: t.clientY });
-          };
-          canvas.ontouchend = loopEnd;
-        }
-
-        function loopMove(e) {
-          const canvas = document.getElementById("loops-canvas");
-          const rect = canvas.getBoundingClientRect();
-          const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-          const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-          loopPath.push({ x, y });
-          drawLoops();
-        }
-
-        function loopEnd() {
-          const canvas = document.getElementById("loops-canvas");
-          canvas.onmousemove = null;
-          canvas.onmouseup = null;
-          canvas.onmouseleave = null;
-          canvas.ontouchmove = null;
-          canvas.ontouchend = null;
-          if (loopPath.length > 10) {
-            const first = loopPath[0];
-            const last = loopPath[loopPath.length - 1];
-            const d = Math.hypot(last.x - first.x, last.y - first.y);
-            if (d < 40) loopClosed = true;
-          }
-          drawLoops();
-          setTimeout(function () {
-            loopPath = [];
-            loopClosed = false;
-            drawLoops();
-          }, 1200);
-        }
-
-        function drawLoops() {
-          const canvas = document.getElementById("loops-canvas");
-          if (!canvas || !loopCtx || !loopDots) return;
-          const dpr = window.devicePixelRatio || 1;
-          loopCtx.clearRect(0, 0, canvas.width, canvas.height);
-          loopCtx.strokeStyle = "rgba(154, 143, 181, 0.35)";
-          loopCtx.lineWidth = 2;
-          loopCtx.beginPath();
-          loopCtx.arc(140, 140, 120, 0, Math.PI * 2);
-          loopCtx.stroke();
-          loopDots.forEach(function (d) {
-            loopCtx.beginPath();
-            loopCtx.arc(d.x, d.y, 6, 0, Math.PI * 2);
-            loopCtx.fillStyle = "rgba(232, 230, 227, 0.9)";
-            loopCtx.fill();
-            loopCtx.strokeStyle = "rgba(168, 166, 161, 0.4)";
-            loopCtx.stroke();
-          });
-          if (loopPath.length > 1) {
-            loopCtx.beginPath();
-            loopCtx.moveTo(loopPath[0].x, loopPath[0].y);
-            loopPath.forEach(function (p) {
-              loopCtx.lineTo(p.x, p.y);
-            });
-            loopCtx.strokeStyle = loopClosed ? "rgba(154, 143, 181, 0.8)" : "rgba(154, 143, 181, 0.5)";
-            loopCtx.lineWidth = loopClosed ? 4 : 2.5;
-            loopCtx.lineCap = "round";
-            loopCtx.lineJoin = "round";
-            loopCtx.stroke();
-          }
+          loopInit();
         }
 
         // ——— Gentle Merge ———
