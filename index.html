@@ -380,114 +380,77 @@
         margin: -8px 0 0;
       }
 
-      .demo-box .wordsearch-wrap {
+      .demo-box .anagram-wrap {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 24px;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
         width: 100%;
         max-width: 520px;
       }
 
-      .demo-box .wordsearch-grid-wrap {
-        padding: 14px;
-        border-radius: 20px;
-        background: rgba(35, 42, 59, 0.6);
+      .demo-box .anagram-row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 18px;
+        background: rgba(35, 42, 59, 0.7);
         border: 1px solid var(--border-soft);
       }
 
-      .demo-box .wordsearch-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-      }
-
-      .demo-box .wordsearch-cell {
-        width: 34px;
-        height: 34px;
+      .demo-box .anagram-tile {
+        min-width: 34px;
+        height: 38px;
+        padding: 0 4px;
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 500;
         color: var(--text-primary);
-        background: rgba(58, 64, 102, 0.6);
+        background: rgba(58, 64, 102, 0.85);
         border: 1px solid var(--border-soft);
         user-select: none;
-        transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
       }
 
-      .demo-box .wordsearch-cell.selected {
-        background: rgba(154, 143, 181, 0.4);
-        box-shadow: 0 0 0 2px rgba(154, 143, 181, 0.5);
+      .demo-box .anagram-tile.selected {
+        background: rgba(154, 143, 181, 0.65);
+        box-shadow: 0 0 0 2px rgba(154, 143, 181, 0.8);
+        transform: translateY(-1px);
       }
 
-      .demo-box .wordsearch-cell.found {
-        background: rgba(154, 143, 181, 0.75);
+      .demo-box .anagram-tile.solved {
+        background: rgba(154, 143, 181, 0.9);
         color: #f6f3ff;
-        box-shadow: 0 0 0 1px rgba(200, 192, 220, 0.9), 0 0 18px rgba(200, 192, 220, 0.8);
-        animation: wordFoundGlow 0.7s ease-out;
+        box-shadow: 0 0 0 1px rgba(200, 192, 220, 0.9), 0 0 18px rgba(200, 192, 220, 0.9);
       }
 
-      @keyframes wordFoundGlow {
-        0% {
-          transform: scale(1);
-          box-shadow: 0 0 0 0 rgba(200, 192, 220, 0.1);
-        }
-        50% {
-          transform: scale(1.08);
-          box-shadow: 0 0 26px 4px rgba(200, 192, 220, 0.9);
-        }
-        100% {
-          transform: scale(1);
-          box-shadow: 0 0 0 1px rgba(200, 192, 220, 0.7);
-        }
+      .demo-box .anagram-meta {
+        text-align: center;
       }
 
-      .demo-box .wordlist-box {
-        padding: 14px 18px;
-        border-radius: 18px;
-        background: rgba(35, 42, 59, 0.5);
-        border: 1px solid var(--border-soft);
-        min-width: 140px;
-      }
-
-      .demo-box .wordlist-title {
-        font-size: 0.7rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--text-softer);
-        margin: 0 0 10px;
-      }
-
-      .demo-box .wordlist {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      .demo-box .wordlist-item {
+      .demo-box .anagram-hint {
         font-size: 0.9rem;
         color: var(--text-soft);
-        transition: color 0.2s, text-decoration 0.2s, opacity 0.2s;
+        margin: 0 0 4px;
       }
 
-      .demo-box .wordlist-item.found {
-        color: #f3ecff;
-        text-decoration: line-through;
-        opacity: 1;
-        text-shadow: 0 0 10px rgba(200, 192, 220, 0.9);
+      .demo-box .anagram-progress {
+        font-size: 0.8rem;
+        color: var(--text-softer);
+        margin: 0;
       }
 
-      .demo-box .wordsearch-actions {
-        margin-top: 10px;
+      .demo-box .anagram-actions {
+        margin-top: 4px;
         display: flex;
         justify-content: center;
+        gap: 8px;
       }
 
       .demo-box .wordsearch-reset {
@@ -1220,25 +1183,16 @@
 
       <section class="demo-box" aria-label="Word Find demo">
         <span class="label">Quick demo</span>
-        <h2 class="title">Word Find</h2>
-        <p class="demo-sub">Drag across letters to find each word from the list</p>
-        <div class="wordsearch-wrap">
-          <div class="wordsearch-grid-wrap">
-            <div class="wordsearch-grid" id="demo-wordsearch-grid" role="grid"></div>
-          </div>
-          <div class="wordlist-box">
-            <p class="wordlist-title">Words to find</p>
-            <ul class="wordlist" id="demo-wordlist">
-              <li class="wordlist-item" data-word="CALM">CALM</li>
-              <li class="wordlist-item" data-word="PEACE">PEACE</li>
-              <li class="wordlist-item" data-word="REST">REST</li>
-              <li class="wordlist-item" data-word="SOFT">SOFT</li>
-              <li class="wordlist-item" data-word="NIGHT">NIGHT</li>
-              <li class="wordlist-item" data-word="QUIET">QUIET</li>
-            </ul>
+        <h2 class="title">Letter Drift</h2>
+        <p class="demo-sub">Tap letters to gently shuffle them into the right word</p>
+        <div class="anagram-wrap">
+          <div class="anagram-row" id="demo-anagram-row" role="list"></div>
+          <div class="anagram-meta">
+            <p class="anagram-hint" id="demo-anagram-hint"></p>
+            <p class="anagram-progress" id="demo-anagram-progress"></p>
           </div>
         </div>
-        <div class="wordsearch-actions">
+        <div class="anagram-actions">
           <button type="button" class="wordsearch-reset" id="demo-wordsearch-reset">
             <span class="icon" aria-hidden="true">
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
@@ -1482,155 +1436,134 @@
 
         var SHAPES = ["circle", "square", "triangle"];
 
-        // ——— Demo box: Word Find ———
+        // ——— Demo box: Letter Drift (calm anagram) ———
         (function () {
-          var size = 7;
-          var words = ["CALM", "PEACE", "REST", "SOFT", "NIGHT", "QUIET"];
-          var placements = {
-            CALM: [[1,1],[1,2],[1,3],[1,4]],
-            PEACE: [[0,1],[0,2],[0,3],[0,4],[0,5]],
-            REST: [[2,0],[3,0],[4,0],[5,0]],
-            SOFT: [[2,2],[3,3],[4,4],[5,5]],
-            NIGHT: [[6,1],[5,2],[4,3],[3,4],[2,5]],
-            QUIET: [[1,6],[2,6],[3,6],[4,6],[5,6]]
-          };
-          var grid = [];
-          var i, j, r, c, key, cell;
-          var container = document.getElementById("demo-wordsearch-grid");
-          if (!container) return;
+          var levels = [
+            { word: "CALM", hint: "How you want to feel here." },
+            { word: "REST", hint: "What your mind is doing between thoughts." },
+            { word: "PEACE", hint: "The quiet inside the noise." },
+            { word: "NIGHT", hint: "When these puzzles feel best." },
+            { word: "SOFT", hint: "How the shapes and sounds should feel." },
+            { word: "QUIET", hint: "Your screen, your room, your thoughts." }
+          ];
+          var idx = 0;
+          var row = document.getElementById("demo-anagram-row");
+          var hintEl = document.getElementById("demo-anagram-hint");
+          var progressEl = document.getElementById("demo-anagram-progress");
+          var resetBtn = document.getElementById("demo-wordsearch-reset");
+          if (!row || !hintEl || !progressEl) return;
 
-          function resetGrid() {
-            grid = [];
-            for (i = 0; i < size; i++) {
-              grid[i] = [];
-              for (j = 0; j < size; j++) grid[i][j] = "";
+          var selectedIndex = null;
+
+          function shuffleLetters(str) {
+            var arr = str.split("");
+            for (var i = arr.length - 1; i > 0; i--) {
+              var j = Math.floor(Math.random() * (i + 1));
+              var tmp = arr[i];
+              arr[i] = arr[j];
+              arr[j] = tmp;
             }
-            for (key in placements) {
-              for (i = 0; i < placements[key].length; i++) {
-                r = placements[key][i][0];
-                c = placements[key][i][1];
-                grid[r][c] = key[i];
-              }
+            // avoid accidentally starting solved
+            if (arr.join("") === str && str.length > 1) {
+              var t = arr[0];
+              arr[0] = arr[1];
+              arr[1] = t;
             }
-            var filler = "ABDEGHIJLNOPQRSTUVWXYZ";
-            for (i = 0; i < size; i++) {
-              for (j = 0; j < size; j++) {
-                if (grid[i][j] === "") grid[i][j] = filler[Math.floor(Math.random() * filler.length)];
-              }
-            }
-            container.innerHTML = "";
-            for (i = 0; i < size; i++) {
-              for (j = 0; j < size; j++) {
-                cell = document.createElement("div");
-                cell.className = "wordsearch-cell";
-                cell.setAttribute("data-row", i);
-                cell.setAttribute("data-col", j);
-                cell.setAttribute("role", "gridcell");
-                cell.textContent = grid[i][j];
-                container.appendChild(cell);
-              }
-            }
+            return arr;
           }
 
-          resetGrid();
+          function renderLevel() {
+            var level = levels[idx];
+            var letters = shuffleLetters(level.word);
+            row.innerHTML = "";
+            selectedIndex = null;
+            letters.forEach(function (ch, i) {
+              var tile = document.createElement("button");
+              tile.type = "button";
+              tile.className = "anagram-tile";
+              tile.textContent = ch;
+              tile.setAttribute("data-idx", i);
+              tile.addEventListener("click", function () {
+                onTileClick(i);
+              });
+              row.appendChild(tile);
+            });
+            hintEl.textContent = level.hint;
+            progressEl.textContent = "Word " + (idx + 1) + " of " + levels.length;
+          }
 
-          var startCell = null;
-          var selectedCells = [];
-          var isSelecting = false;
-
-          function getCellsInLine(r0, c0, r1, c1) {
-            var dr = r1 - r0, dc = c1 - c0;
-            if (dr === 0 && dc === 0) return [[r0, c0]];
-            if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return [];
-            var steps = Math.max(Math.abs(dr), Math.abs(dc));
-            var sr = dr === 0 ? 0 : (dr > 0 ? 1 : -1);
-            var sc = dc === 0 ? 0 : (dc > 0 ? 1 : -1);
+          function currentLetters() {
+            var tiles = row.querySelectorAll(".anagram-tile");
             var out = [];
-            for (var k = 0; k <= steps; k++) {
-              out.push([r0 + k * sr, c0 + k * sc]);
-            }
+            tiles.forEach(function (t) {
+              out.push(t.textContent || "");
+            });
             return out;
           }
 
-          function getWordFromCells(cells) {
-            return cells.map(function (p) { return grid[p[0]][p[1]]; }).join("");
+          function setLetters(arr) {
+            var tiles = row.querySelectorAll(".anagram-tile");
+            tiles.forEach(function (t, i) {
+              t.textContent = arr[i] || "";
+            });
           }
 
           function clearSelection() {
-            selectedCells.forEach(function (p) {
-              var el = container.querySelector("[data-row=\"" + p[0] + "\"][data-col=\"" + p[1] + "\"]");
-              if (el && !el.classList.contains("found")) el.classList.remove("selected");
+            var tiles = row.querySelectorAll(".anagram-tile.selected");
+            tiles.forEach(function (t) {
+              t.classList.remove("selected");
             });
-            selectedCells = [];
+            selectedIndex = null;
           }
 
-          function applySelection(cells) {
+          function onTileClick(i) {
+            var tiles = row.querySelectorAll(".anagram-tile");
+            if (!tiles.length) return;
+            if (selectedIndex === null) {
+              selectedIndex = i;
+              tiles[i].classList.add("selected");
+              return;
+            }
+            if (selectedIndex === i) {
+              clearSelection();
+              return;
+            }
+            // swap letters
+            var letters = currentLetters();
+            var tmp = letters[selectedIndex];
+            letters[selectedIndex] = letters[i];
+            letters[i] = tmp;
+            setLetters(letters);
             clearSelection();
-            selectedCells = cells.slice();
-            selectedCells.forEach(function (p) {
-              var el = container.querySelector("[data-row=\"" + p[0] + "\"][data-col=\"" + p[1] + "\"]");
-              if (el && !el.classList.contains("found")) el.classList.add("selected");
-            });
+            checkSolved();
           }
 
-          function markWordFound(word) {
-            var item = document.querySelector("#demo-wordlist .wordlist-item[data-word=\"" + word + "\"]");
-            if (item) item.classList.add("found");
-            var cells = placements[word];
-            if (cells) {
-              cells.forEach(function (p) {
-                var el = container.querySelector("[data-row=\"" + p[0] + "\"][data-col=\"" + p[1] + "\"]");
-                if (el) { el.classList.remove("selected"); el.classList.add("found"); }
+          function checkSolved() {
+            var level = levels[idx];
+            var word = currentLetters().join("");
+            if (word === level.word) {
+              var tiles = row.querySelectorAll(".anagram-tile");
+              tiles.forEach(function (t) {
+                t.classList.add("solved");
               });
+              progressEl.textContent = "You found \"" + level.word + "\".";
+              setTimeout(function () {
+                idx = (idx + 1) % levels.length;
+                tiles.forEach(function (t) {
+                  t.classList.remove("solved");
+                });
+                renderLevel();
+              }, 900);
             }
           }
 
-          container.addEventListener("mousedown", function (e) {
-            var cellEl = e.target.closest(".wordsearch-cell");
-            if (!cellEl) return;
-            e.preventDefault();
-            var r = parseInt(cellEl.getAttribute("data-row"), 10);
-            var c = parseInt(cellEl.getAttribute("data-col"), 10);
-            startCell = [r, c];
-            isSelecting = true;
-            applySelection([[r, c]]);
-          });
-
-          container.addEventListener("mousemove", function (e) {
-            if (!isSelecting || !startCell) return;
-            var cellEl = e.target.closest(".wordsearch-cell");
-            if (!cellEl) return;
-            var r = parseInt(cellEl.getAttribute("data-row"), 10);
-            var c = parseInt(cellEl.getAttribute("data-col"), 10);
-            var line = getCellsInLine(startCell[0], startCell[1], r, c);
-            if (line.length > 0) applySelection(line);
-          });
-
-          document.addEventListener("mouseup", function () {
-            if (!isSelecting) return;
-            isSelecting = false;
-            if (selectedCells.length > 0) {
-              var word = getWordFromCells(selectedCells);
-              var rev = word.split("").reverse().join("");
-              if (words.indexOf(word) !== -1) markWordFound(word);
-              else if (words.indexOf(rev) !== -1) markWordFound(rev);
-            }
-            clearSelection();
-          });
-
-          container.addEventListener("mouseleave", function () {
-            if (isSelecting) return;
-            clearSelection();
-          });
-
-          var resetBtn = document.getElementById("demo-wordsearch-reset");
           if (resetBtn) {
             resetBtn.addEventListener("click", function () {
-              var items = document.querySelectorAll("#demo-wordlist .wordlist-item.found");
-              items.forEach(function (el) { el.classList.remove("found"); });
-              resetGrid();
+              renderLevel();
             });
           }
+
+          renderLevel();
         })();
 
         // ——— Night Pairs (match two) ———
